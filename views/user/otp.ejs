@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:07 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Evara - eCommerce HTML Template</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<style>
+    #otp-expiry-time{
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+
+<body>
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Pages
+                <span></span> verify otp
+            </div>
+        </div>
+    </div>
+    <section class="pt-150 pb-150" >
+        <div class="container" >
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row" >
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">Verify Otp</h3>
+                                    </div>
+                                    <div class="container mt-5">
+                                        <form method="post" action="/verify" class="mx-auto" id="otpForm">
+                                            <!-- <div class="d-flex justify-content-center">
+                                                <div class="form-group mx-2">
+                                                    <input type="text" class="form-control text-center square-input" name="digit1" maxlength="1" required>
+                                                </div>
+                                                <div class="form-group mx-2">
+                                                    <input type="text" class="form-control text-center square-input" name="digit2" maxlength="1" required>
+                                                </div>
+                                                <div class="form-group mx-2">
+                                                    <input type="text" class="form-control text-center square-input" name="digit3" maxlength="1" required>
+                                                </div>
+                                                <div class="form-group mx-2">
+                                                    <input type="text" class="form-control text-center square-input" name="digit4" maxlength="1" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group d-flex justify-content-center mt-3">
+                                                <button type="submit" class="btn btn-dark btn-block hover-up" name="login">Submit</button>
+                                            </div> -->
+                                            <div class="mb-3 position-relative custom-form-field">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                                    <input type="text" class="ms-2 form-control" id='otp' name="otp" onblur="nameChaking()" placeholder="Enter OTP">
+                                                </span>
+                                                <div id="errorname" class="mt-0 ms-2 position-absolute text-danger"></div>
+                                            </div>
+                                            <br>
+                                            <div class="text-center">
+                                                <a class="text-decoration-none" href="/resendotp" id="resendLink">Resend OTP</a>
+                                                <span id="otp-expiry-time"></span>
+                                                <br><br>
+                                                <button type="submit" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3"></div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
