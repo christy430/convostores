@@ -9,6 +9,9 @@ const cookieParser = require('cookie-parser');
 const mongoose=require('mongoose');
 const bcrypt=require('bcrypt');
 
+//google
+require('./passport');
+
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
 
@@ -44,6 +47,19 @@ app.use((req,res,next)=>{
   res.setHeader("Cache-Control","no-store,no-cache,must-revalidate,private");
   next();
 });
+
+//google sign in
+// app.get('/auth/google',
+//   passport.authenticate('google', { scope: ['profile'] }));
+
+// app.get('/auth/google/callback', 
+//   passport.authenticate('google', { failureRedirect: '/login' }),
+//   function(req, res) {
+//     // Successful authentication, redirect home.
+//     res.redirect('/');
+//   });
+
+
 
 
 app.use(express.json());

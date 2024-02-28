@@ -55,8 +55,57 @@ const adminlogout=async(req,res)=>{
     }
 };
 
+const usermanage= async(req,res)=>{
+    try {
+        const adminData = await user.findById(req.session.admin_id);
+    
+        const usersData = await user.find({is_admin:0});
+    console.log(usersData)
+        res.render('admin/usermanage', { user: usersData, admin: adminData });
+      } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error: " + error.message);
+      }
+}
+
+const listuser = async (req, res) => {
+    try {
+      const id = req.query.id;
+      const uservalue = await user.findById(id);
+      console.log('list', uservalue);
+  
+      if (uservalue.is_blocked) {
+        await user.updateOne(
+          { _id: id }, // Assuming your user schema uses "_id" for the ObjectId
+          {
+            $set: {
+              is_blocked: 0
+            },
+          }
+        );
+  
+        if (req.session.user_id) delete req.session.user_id;
+      } else {
+        await user.updateOne(
+          { _id: id }, // Assuming your user schema uses "_id" for the ObjectId
+          {
+            $set: {
+              is_blocked: 1
+            },
+          }
+        );
+      }
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, error: "Failed to unlist user" });
+    }
+  };
 module.exports={
     adminhome,
     adminlogin,
     verifylogin,
-    adminlogout}
+    adminlogout,
+    usermanage,
+    listuser
+}

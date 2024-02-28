@@ -50,8 +50,8 @@
                                     </div>
                                     <div class="container mt-5">
                                         <form method="post" action="/verify" class="mx-auto" id="otpForm">
-                                            <!-- <div class="d-flex justify-content-center">
-                                                <div class="form-group mx-2">
+                                            <!-- <div class="d-flex justify-content-center"> -->
+                                                <!-- <div class="form-group mx-2">
                                                     <input type="text" class="form-control text-center square-input" name="digit1" maxlength="1" required>
                                                 </div>
                                                 <div class="form-group mx-2">
@@ -65,9 +65,9 @@
                                                 </div>
                                             </div>
                                             
-                                            <div class="form-group d-flex justify-content-center mt-3">
+                                            <!-- <div class="form-group d-flex justify-content-center mt-3">
                                                 <button type="submit" class="btn btn-dark btn-block hover-up" name="login">Submit</button>
-                                            </div> -->
+                                            </div> --> 
                                             <div class="mb-3 position-relative custom-form-field">
                                                 <span class="input-group-text">
                                                     <i class="fa fa-lock" aria-hidden="true"></i>
@@ -75,12 +75,18 @@
                                                 </span>
                                                 <div id="errorname" class="mt-0 ms-2 position-absolute text-danger"></div>
                                             </div>
+                                            <% if(locals.alert){ %>
+                                                <div class="alert alert-warning" id="alertbutton">
+                                                  <%=locals.alert %>
+                                                </div>
+                                                <% } %>
                                             <br>
                                             <div class="text-center">
-                                                <a class="text-decoration-none" href="/resendotp" id="resendLink">Resend OTP</a>
+                                                <button type="submit" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;</button>
                                                 <span id="otp-expiry-time"></span>
                                                 <br><br>
-                                                <button type="submit" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;</button>
+                                                
+                                                <a class="text-decoration-none" href="/resendotp" id="resendLink">Resend OTP</a>
                                             </div>
                                         </form>
                                     </div>
@@ -95,3 +101,29 @@
         </div>
     </section>
 </main>
+<!-- Include jQuery library -->
+<script>
+    setTimeout(()=>{
+        document.getElementById('alertbutton').style.display="none"
+    },3000)
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    
+$(document).ready(function() {
+    // Bind an input event on all input fields with class 'square-input'
+    $('.square-input').on('input', function() {
+        // Get the current input field's value
+        var inputValue = $(this).val();
+
+        // If the input is not empty and the length is equal to the maxlength
+        if (inputValue !== '' && inputValue.length === parseInt($(this).attr('maxlength'))) {
+            // Find the next input field and focus on it
+            $(this).next('.square-input').focus();
+        }
+    });
+});
+</script>
+

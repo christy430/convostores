@@ -14,13 +14,15 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
+    
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
+    
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
-<body>
+<body >
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -42,14 +44,11 @@
             </div>
            
             <form action="/signup" method="post">
-                <% if(locals.alert){ %>
-                    <div class="alert alert-warning" id="alertbutton">
-                      <%=locals.alert %>
-                    </div>
-                    <% } %>
+                
                 <div class="form-group">
                     <input type="text" required="" name="name" placeholder="Username">
                 </div>
+                
                 <div class="form-group">
                     <input type="text" required="" name="email" placeholder="Email">
                 </div>
@@ -59,6 +58,11 @@
                 <div class="form-group">
                     <input required="" type="phone" name="phone" placeholder="Phone">
                 </div>
+                <% if(locals.alert){ %>
+                    <div class="alert alert-warning" id="alertbutton">
+                      <%=locals.alert %>
+                    </div>
+                    <% } %>
                
                 <!-- <div class="login_footer form-group">
                     <div class="chek-form">
@@ -78,7 +82,7 @@
             </div>
             <ul class="btn-login list_none text-center mb-15">
                 <li><a href="#" class="btn btn-facebook hover-up mb-lg-0 mb-sm-4">Login With Facebook</a></li>
-                <li><a href="#" class="btn btn-google hover-up">Login With Google</a></li>
+                <li><a href="/auth/google"  class="btn btn-google hover-up">Login With Google</a></li>
             </ul>
             <div class="text-muted text-center">Already have an account? <a href="/login">Sign in now</a></div>
         </div>
@@ -86,3 +90,4 @@
 </div>
 <div class="col-3"></div>
 </div>
+

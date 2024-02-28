@@ -5,7 +5,7 @@ const isLogin= async(req,res,next)=>{
     
     try{
         if(req.session.admin_id && userData.is_admin==1){
-            console.log('if');
+            // console.log('if in admin authentication');
             next();
         }else{
             console.log('else');

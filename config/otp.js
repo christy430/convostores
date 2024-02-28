@@ -31,7 +31,7 @@ const nodemailer = require('nodemailer')
       };
       console.log(mailOptions)
        const information=await  transporter.sendMail( mailOptions);
-       console.log('shinto');
+      //  console.log('shinto');
     } catch (error) {
       console.log(error);
     }

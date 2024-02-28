@@ -11,7 +11,7 @@ const isLogin = async(req,res,next)=>{
         }else{
             if(userData.is_blocked==1){
                 req.session.user_id=null ;
-                res.render("login", { alert: "You are blocked from this site!" });
+                res.render("./user/login", { alert: "You are blocked from this site!" });
             }
             else{
                 res.redirect('/');
@@ -28,7 +28,7 @@ const isLogout = async(req,res,next)=>{
 
         if(req.session.user_id && userData.is_admin==0 ){
             console.log('user',req.session.user_id)
-            res.redirect('/');
+            res.redirect('/home');
         }
         else{
             next();

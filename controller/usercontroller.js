@@ -1,6 +1,8 @@
 const User = require('../model/usermodel');
 const bcrypt=require('bcrypt');
 const message=require('../config/otp')
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client("941543183511-fr0s2li519qfsgmos5rr12nd5ue511et.apps.googleusercontent.com")
 
 
 //hash password
@@ -13,23 +15,23 @@ const securePassword = async (password) => {
   }
 };
 
-const home=async(req,res)=>{
-    try{
-      console.log(req.session.user_id);
-      if(req.session.user_id ){
-        let userid=req.session.user_id; 
-        
-        res.render('./user/home',{user:userid});
-      }else{
-        res.render('./user/home',{user:null});
+//render home page
 
-      }
+const home = async (req, res) => {
+  try {
+    if (!req.session.user_id) {
+      res.render("./user/home", { user: null });
+    } else {
+      const userData = await User.findById({ _id: req.session.user_id });
+      res.render("./user/home", { user: userData});
     }
-    catch(err){
-        console.log(err);
-    }
-}
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
+
+//render login page
 const loadlogin=async(req,res)=>{
     try{
         res.render('./user/login');
@@ -38,6 +40,8 @@ const loadlogin=async(req,res)=>{
         console.log(err);
     }
 }
+
+//render signuppage
 const signup=async(req,res)=>{
     try{
         res.render('./user/signup');
@@ -96,6 +100,28 @@ const verifyOtp = async (req,res)=>{
   }   
 } catch(error){
     console.log(error.message)
+  }
+}
+
+//resend otp
+const resendotp=async(req,res)=>{
+  try{
+    const userData = req.session.userData;
+    console.log("resend otp")
+    if(!userData){
+      // res.status(400).json({alert:"invalid or expired session"});
+      console.log("invalid otp")
+    }else{
+      console.log("in else part ")
+      
+      delete req.session.otp;
+      const data= await message.sendverifyemail(userData.email,req)
+    }
+
+    res.render('./user/otp',{alert:"OTP resent successfully"})
+  }catch(error){
+    console.log(error);
+    res.render('./user/otp',{alert:"failed to send otp"})
   }
 }
 
@@ -193,6 +219,41 @@ const postsignup=async(req,res)=>{
         }
 }; 
 
+// // Google Sign-In route
+// const googleSignIn = async (req, res) => {
+//   try {
+//     const { token } = req.body;
+
+//     const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: 'YOUR_GOOGLE_CLIENT_ID',
+//     });
+
+//     const payload = ticket.getPayload();
+//     const googleEmail = payload.email;
+
+//     // Check if the Google email exists in your database
+//     const existingUser = await User.findOne({ email: googleEmail });
+
+//     if (existingUser) {
+//       // Log in the existing user
+//       req.session.user_id = existingUser._id;
+//       return res.status(303).redirect('/');
+//     } else {
+//       // Redirect to a registration page or handle as needed
+//       return res.status(303).redirect('/signup-google');
+//     }
+//   } catch (error) {
+//     console.error('Google Sign-In Error:', error);
+//     return res.status(500).send('Internal Server Error');
+//   }
+// };
+
+
+
+
+
+
 const userlogout=async(req,res)=>{
   try{
     delete req.session.user_id;
@@ -207,6 +268,7 @@ const userlogout=async(req,res)=>{
 
 
 
+
 module.exports={
   home,
   loadlogin,
@@ -216,5 +278,8 @@ module.exports={
   verifyOtp,
   verifylogin,
   loadloginuser,
-  userlogout
+  userlogout,
+  resendotp,
+  
+  
 };
