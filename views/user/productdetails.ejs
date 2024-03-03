@@ -1,0 +1,435 @@
+<%-include('../layout/userheader') %>
+<style>
+    /* Increase the size of the increment and decrement buttons */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        height: 50px;
+        /* Adjust the height as needed */
+        width: 60px;
+        /* Adjust the width as needed */
+    }
+
+    /* For Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+
+
+.image-container {
+  /* width: 500px; */
+  height: 470px;
+    overflow: hidden;
+    /* border: 1px solid #ccc; Optional: Add a border for visualization */
+}
+
+.zoom-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image-zoom {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.image-zoom:hover {
+    transform: scale(1.8); /* Adjust the scale factor for zoom effect */
+}
+.thumbnail {
+    /* width: 50px; */
+    /* height: 50px; */
+    margin-right: 10px;
+    border: 1px solid black;  
+    border-radius: 10%;
+  }
+  .custom-col {
+    flex: 0 0 5.5%; /* Adjust the width percentage as needed */
+    max-width: 5.5%;
+  }
+
+</style>
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Running   
+                    <span></span> Platform
+                </div>
+                <div id="cartNotification" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #333; color: #fff; padding: 10px; border-radius: 5px;">
+                    Item added to cart!
+                  </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-11">
+                        <div class="product-detail accordion-detail">
+                            <div class="row mb-50">
+                                <div class="col-1 custom-col d-flex  flex-column justify-content-center">
+                                    <% for (let i = 0; i < product.image.length; i++) {%>        
+                          
+                                    <img src='/assets/imgs/productIMG/<%= product.image[i]%>' onclick="changeMainImage('<%= product.image[i] %>')" alt="Thumbnail" class="my-3 thumbnail">
+                                    <% } %>        
+                          
+                                  </div>
+                                <div class="col-md-5 col-sm-12 col-xs-12">
+                                    <div class="mt-5">
+                           
+                                   
+                                      
+                                        <!-- THUMBNAILS -->
+                                   
+                                    </div>
+                                    <div class=" image-container">
+                                        <div class="zoom-container">
+                                            <img src='/assets/imgs/productIMG/<%= product.image[0]%>' id="mainImage" alt="Image" class="image-zoom">
+                                        </div>
+                                      </div>
+
+
+
+                                    
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-info">
+                                        <h2 class="title-detail">
+                                            <%= product.name %>
+                                        </h2>
+                                        <div class="product-detail-rating">
+                                           
+                                            <div class="product-rate-cover text-end">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating" style="width:90%">
+                                                    </div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix product-price-cover">
+                                            
+                                            <div class="product-price primary-color float-left">
+                                                <% if (product.discountPrice && product.discountPrice !=product.price) { %>
+                                                  
+
+                                                    <ins><span class="text-brand">₹<%= product.discountPrice %>
+                                                    </span></ins>
+                                                <ins><span class="old-price font-md ml-15">₹<%= product.price %>
+                                                            </span></ins>
+                                                <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                
+                                                    <% } else { %>
+                                                        <ins><span class="text-brand">₹<%= product.price %>
+                                          
+                                                    <% } %>
+                                            
+                                            </div>
+                                        </div>
+                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                        <div class="short-desc mb-30">
+                                            <p>  <%= product.description %></p>
+                                        </div>
+                                        <div class="product_sort_info font-xs mb-30">
+                                            <ul>
+                                                <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera
+                                                    Brand Warranty</li>
+                                                <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return
+                                                    Policy</li>
+                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="attr-detail attr-size">
+                                            <strong class="mr-10">Size</strong>
+                                            <ul class="list-filter size-filter font-small">
+
+                                                <% product.sizes.forEach(sizeData=> { %>
+
+                                                    <li  onclick="setSize('<%= sizeData.size %>')"><a href="#">
+                                                            <%= sizeData.size %>
+                                                        </a></li>
+
+                                                    <% }); %>
+
+                                            </ul>
+                                        </div>
+
+                                     
+
+
+                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                     
+                                            <input type="hidden" value="<%= product._id %>"   name="productData_id" id="productData_id">
+                                            <div class="detail-extralink">
+                                                <input type="number" name="qty" id="qty" class="w-25 py-4" value="1" min="1" max="10">
+                                                <div class="product-extra-link2 w-50 ">
+    
+                                                    <button type="submit"onclick="addToCart()" class=" btn-product btn-cart"><span>Add To Cart</span></button>
+    
+    
+                                                    <button aria-label="Add To Wishlist" class=" btn action-btn hover-up "
+                                                        ><i class="fi-rs-heart  "></i></button>
+                                                </div>
+                                            </div>
+                                   
+                                     
+                                        <ul class="product-meta font-xs color-grey mt-50">
+                                            <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                            
+                                            <!-- <li>Availability:<span class="in-stock text-success ml-5">8 Items In
+                                                    Stock</span></li> -->
+                                                    <ul>
+                                                        <%
+                                                        let totalStock = product.sizes.reduce((total, sizeData) => total + sizeData.stock, 0);
+                                                      %>
+                                                      
+                                                      
+                                                      
+                                                      <% if (totalStock ==0) { %>
+                                                        <p style="color: red;">Out of Stock</p>
+                                                      <% } else if (totalStock <= 15) { %>
+                                                        <p style="color: red;">only <%-totalStock%> left (Low Stock)</p>
+                                                      <% } %>
+                                                      </ul>
+                                                      
+                                                      
+                                                      
+                                        </ul>
+                                    </div>
+                                    <!-- Detail Info -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+function changeMainImage(imageUrl) {
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = `/assets/imgs/productIMG/${imageUrl}`;
+    }
+    document.querySelector('.image-zoom').addEventListener('mousemove', function(e) {
+      const { left, top, width, height } = this.getBoundingClientRect();
+      const x = (e.clientX - left) / width * 100;
+      const y = (e.clientY - top) / height * 100;
+
+      this.style.transformOrigin = `${x}% ${y}%`;
+    });
+let sizeData;
+    function setSize(size) {
+        sizeData= size;
+}
+
+    function addToCart() {
+
+    const qtyData = document.getElementById('qty').value;
+    const productDataId =  document.getElementById('productData_id').value;
+   
+
+
+    if (qtyData && productDataId ) {
+      const requestData = {
+        qty: qtyData,
+        size: sizeData,
+        productData_id: productDataId
+      };
+
+
+      fetch('/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      })
+      .then(response => response.json())
+      .then(data => {
+   
+        if (data.success) {
+          const notification = document.getElementById('cartNotification');
+      notification.style.display = 'block';
+
+      // Hide the notification after 2 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+        window.location.href = `/singleProduct/${productDataId}`;
+      }, 1000);
+          
+        } else {
+          alert('Error occurred while placing order');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error occurred while placing order');
+      });
+    }
+  }
+    </script>
+
+<footer class="main">
+    <section class="newsletter p-30 text-white wow fadeIn animated">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-md-3 mb-lg-0">
+                    <div class="row align-items-center">
+                        <div class="col flex-horizontal-center">
+                            <img class="icon-email" src="/assets/imgs/theme/icons/icon-email.svg" alt="">
+                            <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                        </div>
+                        <div class="col my-4 my-md-0 des">
+                            <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <!-- Subscribe Form -->
+                    <form class="form-subcriber d-flex wow fadeIn animated">
+                        <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
+                        <button class="btn bg-dark text-white" type="submit">Subscribe</button>
+                    </form>
+                    <!-- End Subscribe Form -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-padding footer-mid">
+        <div class="container pt-15 pb-20">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget-about font-md mb-md-5 mb-lg-0">
+                        <div class="logo logo-width-1 wow fadeIn animated">
+                            <a href="index.html"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
+                        </div>
+                        <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                        <p class="wow fadeIn animated">
+                            <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                        </p>
+                        <p class="wow fadeIn animated">
+                            <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                        </p>
+                        <p class="wow fadeIn animated">
+                            <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                        </p>
+                        <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                        <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                            <a href="#"><img src="/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                            <a href="#"><img src="/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                            <a href="#"><img src="/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                            <a href="#"><img src="/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                            <a href="#"><img src="/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <h5 class="widget-title wow fadeIn animated">About</h5>
+                    <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms &amp; Conditions</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2  col-md-3">
+                    <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                    <ul class="footer-list wow fadeIn animated">
+                        <li><a href="#">Sign In</a></li>
+                        <li><a href="#">View Cart</a></li>
+                        <li><a href="#">My Wishlist</a></li>
+                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Order</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-12">
+                            <p class="wow fadeIn animated">From App Store or Google Play</p>
+                            <div class="download-app wow fadeIn animated">
+                                <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="/assets/imgs/theme/app-store.jpg" alt=""></a>
+                                <a href="#" class="hover-up"><img src="/assets/imgs/theme/google-play.jpg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                            <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                            <img class="wow fadeIn animated" src="/assets/imgs/theme/payment-method.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container pb-20 wow fadeIn animated">
+        <div class="row">
+            <div class="col-12 mb-20">
+                <div class="footer-bottom"></div>
+            </div>
+            <div class="col-lg-6">
+                <p class="float-md-left font-sm text-muted mb-0">&copy; 2021, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+            </div>
+            <div class="col-lg-6">
+                <p class="text-lg-end text-start font-sm text-muted mb-0">
+                    Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights reserved
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="text-center">
+                <h5 class="mb-5">Now Loading</h5>
+                <div class="loader">
+                    <div class="bar bar1"></div>
+                    <div class="bar bar2"></div>
+                    <div class="bar bar3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor JS-->
+<script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="/assets/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/plugins/slick.js"></script>
+<script src="/assets/js/plugins/jquery.syotimer.min.js"></script>
+<script src="/assets/js/plugins/wow.js"></script>
+<script src="/assets/js/plugins/jquery-ui.js"></script>
+<script src="/assets/js/plugins/perfect-scrollbar.js"></script>
+<script src="/assets/js/plugins/magnific-popup.js"></script>
+<script src="/assets/js/plugins/select2.min.js"></script>
+<script src="/assets/js/plugins/waypoints.js"></script>
+<script src="/assets/js/plugins/counterup.js"></script>
+<script src="/assets/js/plugins/jquery.countdown.min.js"></script>
+<script src="/assets/js/plugins/images-loaded.js"></script>
+<script src="/assets/js/plugins/isotope.js"></script>
+<script src="/assets/js/plugins/scrollup.js"></script>
+<script src="/assets/js/plugins/jquery.vticker-min.js"></script>
+<script src="/assets/js/plugins/jquery.theia.sticky.js"></script>
+<script src="/assets/js/plugins/jquery.elevatezoom.js"></script>
+<!-- Template  JS -->
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/shop.js"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:20 GMT -->
+</html>

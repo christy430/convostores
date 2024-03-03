@@ -81,9 +81,70 @@ const unlistcategory= async(req,res)=>{
     
     
 }
+
+const editcategoryhome= async(req,res)=>{
+    try{
+        const id= req.query.id;
+        const categorydata= await category.findById(id);
+        res.render('admin/editcategory',{category:categorydata});
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+const editcategory= async(req,res)=>{
+    try{
+        let id=req.body.category_id;
+        console.log(id,"from editcategiry try block");
+        const existingcategory= await category.findOne({name:{$regex: new RegExp(`^{req.body.name}$`,'i')},_id:{$ne:id}});
+        console.log(existingcategory);
+        if(existingcategory){
+            console.log("in if block");
+            return res.render('admin/editcategory',{
+                alert:"category name already exists",
+                category:existingcategory
+            });
+        }
+        if(!req.file){
+            const categorydata= await category.findByIdAndUpdate(
+                {_id:id},
+                {
+                    $set:{
+                        name:req.body.name,
+                        description:req.body.description
+                    },
+                }
+            );
+
+        
+        }else{
+            const categorydata= await category.findByIdAndUpdate(
+                {_id:id},
+                {
+                    $set:{
+                        name:req.body.name,
+                        image:req.file.filename,
+                        description:req.body.description
+                    },
+                }
+            );
+            console.log(categorydata);
+        }
+        res.redirect('/admin/category')
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+
+
 module.exports={
     loadcategory,
     addcategory,
     loadcategoryform,
-    unlistcategory
+    unlistcategory,
+    editcategoryhome,
+    editcategory
 }

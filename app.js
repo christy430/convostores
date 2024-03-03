@@ -8,9 +8,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const mongoose=require('mongoose');
 const bcrypt=require('bcrypt');
+const passport=require('./passport');
 
 //google
-require('./passport');
+
 
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
@@ -47,6 +48,8 @@ app.use((req,res,next)=>{
   res.setHeader("Cache-Control","no-store,no-cache,must-revalidate,private");
   next();
 });
+
+app.use('/googlesignin',passport);
 
 //google sign in
 // app.get('/auth/google',

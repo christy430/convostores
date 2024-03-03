@@ -1,4 +1,6 @@
 const User = require('../model/usermodel');
+const product= require('../model/productmodel');
+const category= require('../model/categorymodel');
 const bcrypt=require('bcrypt');
 const message=require('../config/otp')
 const { OAuth2Client } = require('google-auth-library');
@@ -19,17 +21,47 @@ const securePassword = async (password) => {
 
 const home = async (req, res) => {
   try {
+    const products= await product.find();
+    const categories= await category.find();
     if (!req.session.user_id) {
-      res.render("./user/home", { user: null });
+      res.render("./user/home", { user: null, products, categories });
     } else {
       const userData = await User.findById({ _id: req.session.user_id });
-      res.render("./user/home", { user: userData});
+      res.render("./user/home", { user: userData, products, categories});
     }
   } catch (error) {
     console.log(error.message);
   }
 };
 
+const loadSingleShop = async (req, res) => {
+  try {
+    console.log('in product');
+    const userId = req.session.user_id;
+    const userData = await User.findById(userId);
+    const productId = req.params.id;
+    const productdata = await product.findById(productId);
+    const categories = await category.find();
+console.log(productdata,categories,'end');
+    if (!userData) {
+      return res.status(404).send("User not found");
+    }
+
+
+    if (!productdata) {
+      return res.status(404).send("Product not found");
+    }
+
+
+    if (!categories || categories.length === 0) {
+      return res.status(404).send("Categories not found");
+    }
+
+    res.render("./user/productdetails", { user:userData, product:productdata, categories });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 //render login page
 const loadlogin=async(req,res)=>{
@@ -64,6 +96,7 @@ const loadotp=async(req,res)=>{
 //otp verification
 const verifyOtp = async (req,res)=>{
   try{
+    
     const otp= req.body.otp
     const userData = req.session.userData;
     const otpGeneratedTime = req.session.otpGeneratedTime;
@@ -195,6 +228,13 @@ const postsignup=async(req,res)=>{
               title: 'Sign up'
             });
           }
+          const phoneRegex = /^\d{10}$/;
+          if (!phoneRegex.test(req.body.phone)) {
+          return res.render('./user/signup', {
+            alert: 'Invalid phone number. Please enter a 10-digit phone number.',
+            title: 'Sign up'
+            });
+}
           const existingUser = await User.findOne({ email: req.body.email });
 
           if (existingUser) {
@@ -249,7 +289,13 @@ const postsignup=async(req,res)=>{
 //   }
 // };
 
-
+const accounthome= async(req,res)=>{
+  try{
+    res.render('./user/acoount');
+  }catch(error){
+    console.log(error);
+  }
+}
 
 
 
@@ -265,12 +311,20 @@ const userlogout=async(req,res)=>{
   }
 }
 
+const loadforgotpassword= async (req,res)=>{
+  try{
+    res.render('./user/forgotpassword')
+  }catch(error){
+    console.log(error);
+  }
+}
 
 
 
 
 module.exports={
   home,
+  loadSingleShop,
   loadlogin,
   signup,
   postsignup,
@@ -280,6 +334,7 @@ module.exports={
   loadloginuser,
   userlogout,
   resendotp,
-  
+  accounthome,
+  loadforgotpassword
   
 };
