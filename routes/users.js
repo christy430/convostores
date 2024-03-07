@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var usercontroller= require('../controller/usercontroller')
 const authentication=require('../middlewares/userauthentication')
+const addresscontroller=require('../controller/addresscontroller');
+const checkoutcontroller=require('../controller/checkoutcontroller');
+const cartcontroller= require('../controller/cartcontroller')
 // const passport=require('passport');
 // require('../passport');
 
@@ -13,8 +16,6 @@ const authentication=require('../middlewares/userauthentication')
 
 
 
-//userHome
-// router.get('/',usercontroller.home);
 
 //login
 router.get('/',authentication.isLogout, usercontroller.home);
@@ -47,6 +48,21 @@ router.get('/resendotp',usercontroller.resendotp)
 //forgot password
 router.get('/forgotpassword',usercontroller.loadforgotpassword);
 
+//adress
+router.get('/useraddress',addresscontroller.loadaddress)
+router.get('/addaddress',addresscontroller.loadaddaddress);
+router.post('/addaddress',addresscontroller.loadaddaddress);
+router.get('/editadress',addresscontroller.editaddress);
+router.get('/editaddress',addresscontroller.editaddress);
+router.get('/deleteaddress',addresscontroller.deleteaddress);
 
+//order
+router.get('/checkout',checkoutcontroller.loadcheckout)
+
+//cart
+router.get('/cart',authentication.isLogin,cartcontroller.loadcart);
+router.post('/cart',authentication.isLogin,cartcontroller.addtocart);
+router.put('/updatecart',authentication.isLogin,cartcontroller.updatecart)
+router.delete('/removefromcart',authentication.isLogin,cartcontroller.removefromcart);
 
 module.exports = router;

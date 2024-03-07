@@ -244,8 +244,7 @@ let sizeData;
         size: sizeData,
         productData_id: productDataId
       };
-
-
+console.log(requestData,"requestData")
       fetch('/cart', {
         method: 'POST',
         headers: {
@@ -255,8 +254,10 @@ let sizeData;
       })
       .then(response => response.json())
       .then(data => {
-   
+    console.log(data,"data from ejs cart");
         if (data.success) {
+            console.log(data,"data from ejs cart");
+
           const notification = document.getElementById('cartNotification');
       notification.style.display = 'block';
 

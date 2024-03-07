@@ -150,7 +150,7 @@
                   <div class="rating-result" title="90%">
                     <span>
                         <span>
-                      <%if(product.discountStatus==true &&new Date() <= new Date(product.discountEnd)  ){%>
+                      <%if(product.discountStatus==true && new Date() <= new Date(product.discountEnd)  ){%>
                                                     <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
                                                     <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
                                                 <%}%>

@@ -48,7 +48,7 @@ const router = express.Router();
 require('dotenv').config()
 
 const CLIENT_ID = process.env.client_id;
-const CLIENT_SECRET = process.env.client_id;
+const CLIENT_SECRET = process.env.client_secret;
 const REDIRECT_URI ="http://localhost:3000/auth/google/callback";
 
 // Initiates the Google Login flow

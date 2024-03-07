@@ -39,6 +39,6 @@ admin_route.get('/deleteProduct/:id',adminauthentication.isLogin,productcontroll
 admin_route.get('/editproduct',adminauthentication.isLogin,productcontroller.editproducthome);
 admin_route.post('/editproduct',multer.uploadProduct.array("image"),productcontroller.editproduct);
 //order routes
-admin_route.get('/order',adminauthentication.isLogin,ordercontroller.loadorder)
+admin_route.get('/order',adminauthentication.isLogin,ordercontroller.loadorders)
 
 module.exports = admin_route;
