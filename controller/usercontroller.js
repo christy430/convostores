@@ -130,7 +130,13 @@ const verifyOtp = async (req,res)=>{
     } else{
       res.render("./user/otp", { alert: "The OTP is incorrect" });
     }
-  }   
+  } else {
+    if (otp == req.session.otp) {
+      res.redirect("/resetPassword");
+    } else {
+      res.render("user/otp", { error: "invailid otp" });
+    }
+  }  
 } catch(error){
     console.log(error.message)
   }
@@ -291,7 +297,10 @@ const postsignup=async(req,res)=>{
 
 const accounthome= async(req,res)=>{
   try{
-    res.render('./user/acoount');
+    const userId = req.session.user_id;
+    const userData = await User.findById(userId);
+
+    res.render('./user/acoount',{userId,userData});
   }catch(error){
     console.log(error);
   }
@@ -319,6 +328,128 @@ const loadforgotpassword= async (req,res)=>{
   }
 }
 
+const forgotpassword=async(req,res)=>{
+  try{
+
+    const emaildata= req.body.email;
+
+    const existingUser= await User.findOne({email:emaildata});
+    req.session.userdata=existingUser;
+    req.session.user_id=existingUser._id;
+    if(existingUser){
+      console.log(existingUser.email,"jjjc");
+      const data= await message.sendverifyemail(existingUser.email,req);
+      return res.redirect('/otp');
+    }else{
+      res.render('user/forgotpassword',{
+        error:"Attempt failed",
+        User:null,
+      });
+    }
+
+  }catch(error){
+    console.log(error);
+  }
+};
+
+const loadresetpassword=async(req,res)=>{
+  try{
+    if(req.session.user_id){
+      const userId=req.session.user_id;
+
+      const user= await User.findById(userId);
+      res.render('user/resetpassword',{User:user});
+
+    }else{
+      res.redirect('/forgotpassword');
+    }
+  }catch(error){
+    console.log(error);
+  }
+}
+
+const resetPassword= async(req,res)=>{
+  try{
+    const userId=req.session.user_id;
+    const password=req.body.password;
+    const secure_password=await securePassword(password);
+    const updatedata= await User.findByIdAndUpdate(
+      {_id:userId},
+      {
+        $set:{password:secure_password}
+      }
+    );
+    if(updatedata){
+      res.redirect('/account');
+    }
+  }catch(error){
+    console.log(error);
+  }
+}
+
+const useredit= async (req,res)=>{
+  try{
+    console.log(req.body,"req.body from usercontroller");
+    let id= req.body.user_id;
+    const userData= await User.findById(id);
+    // console.log(userData,"userdata from useredit userconmtroller")
+    const{name,phone}=req.body;
+  
+    if(!req.file){
+      const updatedata= await User.findByIdAndUpdate(
+        {_id:id},
+        {
+          $set:{
+            name,
+            phone,
+          },
+        }
+      );
+    }else{
+      const updatedata= await User.findByIdAndUpdate(
+        {_id:id},
+        {
+          $set:{
+            name,
+            phone,
+            image:req.file.filename,
+          },
+        }
+      );
+    }
+    
+
+    res.redirect('/account')
+  }catch(error){
+    console.log(error);
+  }
+}
+
+const updateprofilepicture=async(req,res)=>{
+  try{
+    console.log('start');
+    const userData= await User.findById(req.session.user_id);
+    console.log(userData,"userdata from updateprofilepicture")
+    // console.log(req.file.filename,'blaa');
+    if(!req.file){
+      return res.status(400).json({success:false,message:'No File uploaded'});
+    }
+
+    const croppedImage= req.file.filename;
+
+    await User.findByIdAndUpdate(userData._id,{
+      $set:{
+        image:croppedImage,
+      }
+    });
+
+    res.status(200).json({success:true,message:'Profile picture changed'});
+  }catch(error){
+    console.log(error);
+    res.status(500).json({success:false,message:'Internal server error'});
+  }
+}
+
 
 
 
@@ -335,6 +466,11 @@ module.exports={
   userlogout,
   resendotp,
   accounthome,
-  loadforgotpassword
+  loadforgotpassword,
+  useredit,
+  updateprofilepicture,
+  forgotpassword,
+  loadresetpassword,
+  resetPassword
   
 };

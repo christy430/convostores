@@ -84,17 +84,13 @@
          
 
               <td>
-               
-                <% if (user.is_blocked ==1) { %>
-                  <a  onclick="userUnlist('<%= user._id %>',`<%=  user.is_blocked==0 ? 'unlist' : 'list' %>`)" class="btn btn-sm font-sm rounded btn-brand">
-                    <i class="material-icons md-edit"></i> List
-                  </a>
-                <% } else { %>
-                  <a  onclick="userUnlist('<%= user._id %>',`<%=  user.is_blocked==0 ? 'unlist' : 'list' %>`)" class="btn btn-sm font-sm rounded btn-danger">
-                    <i class="material-icons md-edit"></i> Unlist
-                  </a>
-                <% } %>
+                  <a onclick="toggleUserListStatus(event, '<%= user._id %>', '<%= user.is_blocked == 0 ?"unlisted":"listed"%>')" 
+                    class="btn btn-sm font-sm rounded <%= user.is_blocked == 0 ? 'btn-danger' : 'btn-brand' %>">
+                    <i class="material-icons md-edit"></i>
+                    <%= user.is_blocked == 0 ? 'Unlist' : 'List' %>
+                  </a>  
               </td>
+
             </tr>
             <%
               });
@@ -141,115 +137,67 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       
-function userUnlist(userid,action) {
-  let titleText, confirmText, successText, url;
-                
-                if (action === 'list') {
-                    titleText = "Are you sure?";
-                    confirmText = "Please confirm to unblock this user!";
-                    successText = "User has been unblocked";
-                    buttonText = "Yes!"
-                } else if (action === 'unlist') {
-                    titleText = "Are you sure?";
-                    confirmText = "Please confirm to block this user!";
-                    successText = "User has been blocked";
-                    buttonText = "Yes!"
-                }
+function toggleUserListStatus(event, userId, currentStatus) {
+    let titleText, confirmText, successText, buttonText, buttonColor, action;
 
-                Swal.fire({
-                    title: titleText,
-                    text: confirmText,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: buttonText,
-                }).then((result) => {
-        if (result.isConfirmed) {
-          // Perform the deletion via AJAX/fetch to the server
-          fetch(`/admin/unlistUser?id=${userid}`, {
-            method: 'GET',
-            // Add other necessary headers or configurations
-          }).then(response => {
-            if (response.ok) {
-              // Product successfully deleted
-              Swal.fire({ 
-                title: "success",
-                text: `Updated `,
-                icon: "success",
-                timer: 2000,
-                timeProgressBar: true,
-                showConfirmButton: false,
-
-
-              })
-                .then(() => {
-                  // Redirect after displaying the success message
-                  window.location.href = '/admin/usermanage '; // Redirect to a suitable page
-                });
-            } else {
-              Swal.fire("Error!", "Failed to delete product", "error");
-            }
-          }).catch(error => {
-            Swal.fire("Error!", "Failed to delete product", "error");
-          });
-        }
-      });
+    if (currentStatus === 'unlisted') {
+        titleText = "Are you sure?";
+        confirmText = "Please confirm to unblock this user!";
+        successText = "User has been unblocked";
+        buttonText = "List";
+        buttonColor = "#d33";
+        action = 'list';
+    } else {
+        titleText = "Are you sure?";
+        confirmText = "Please confirm to block this user!";
+        successText = "User has been blocked";
+        buttonText = "Unlist";
+        buttonColor = "#3085d6";
+        action = 'unlist';
     }
-    function Unlistandlist(userId, action) {
-                let titleText, confirmText, successText, url;
-                
-                if (action === 'list') {
-                    titleText = "Are you sure?";
-                    confirmText = "Please confirm to unblock this user!";
-                    successText = "User has been unblocked";
-                    buttonText = "Yes!"
-                } else if (action === 'unlist') {
-                    titleText = "Are you sure?";
-                    confirmText = "Please confirm to block this user!";
-                    successText = "User has been blocked";
-                    buttonText = "Yes!"
-                }
 
-                Swal.fire({
-                    title: titleText,
-                    text: confirmText,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: buttonText,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Perform the listing or unlisting via AJAX/fetch to the server
-                        fetch(`/admin/unlistUser?id=${productId}`, {
-                            method: 'GET',
-                            // Add other necessary headers or configurations
-                        }).then(response => {
-                            if (response.ok) {
-                                // Success message
-                                Swal.fire({
-                                    title: "Success",
-                                    text: successText,
-                                    icon: "success",
-                                    timer: 2000,
-                                    timeProgressBar: true,
-                                    showConfirmButton: false,
-                                }).then(() => {
-                                    // Redirect after displaying the success message
-                                    window.location.reload(); // Redirect to a suitable page
-                                });
-                            } else {
-                                Swal.fire("Error!", "Failed to perform the action", "error");
-                            }
-                        }).catch(error => {
-                            Swal.fire("Error!", "Failed to perform the action", "error");
-                        });
-                    }
-                });
-            }
+    Swal.fire({
+        title: titleText,
+        text: confirmText,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: buttonColor,
+        cancelButtonColor: "#6c757d", // You can set your default button color here
+        confirmButtonText: buttonText,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Perform the listing or unlisting via AJAX/fetch to the server
+            fetch(`/admin/unlistUser?id=${userId}&action=${action}`, {
+                method: 'GET',
+                // Add other necessary headers or configurations
+            }).then(response => {
+                if (response.ok) {
+                    // Success message
+                    Swal.fire({
+                        title: "Success",
+                        text: successText,
+                        icon: "success",
+                        timer: 2000,
+                        timeProgressBar: true,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        // Update the button text
+                        event.target.innerText = buttonText;
+                        // Update the button background color
+                        event.target.style.backgroundColor = buttonColor;
+                    });
+                } else {
+                    Swal.fire("Error!", "Failed to perform the action", "error");
+                }
+            }).catch(error => {
+                Swal.fire("Error!", "Failed to perform the action", "error");
+            });
+        }
+    });
+}
+
 
    
 </script>
 
-        <%-include('../layout/adminfooter') %>
+<%-include('../layout/adminfooter') %>

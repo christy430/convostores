@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
   const storeUser = multer.diskStorage({
     destination: function (req, file, cb) {
       
-      cb(null, 'public/userassets/imgs/user');
+      cb(null, 'public/assets/imgs/user');
     },
     filename: function (req, file, cb) {
       const fileName = Date.now() + path.extname(file.originalname);

@@ -17,211 +17,307 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css" rel="stylesheet">
 </head>
 
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
-            <div class="breadcrumb">
-                <a href="index.html" rel="nofollow">Home</a>
-                <span></span> Pages
-                <span></span> Account
-            </div>
+          <div class="breadcrumb">
+            <a href="/" rel="nofollow">Home</a>
+            <span></span> Pages
+            <span></span> Account
+          </div>
         </div>
-    </div>
-    <section class="pt-150 pb-150">
-        <div class="container">
+      </div>
+
+    <section class="pt-80 pb-100">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 m-auto">
             <div class="row">
-                <div class="col-lg-10 m-auto">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="dashboard-menu">
-                                <ul class="nav flex-column" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="/addaddress" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
+                <div class="col-md-4">
+
+                <div class="dashboard-menu">
+                    <ul class="nav flex-column" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="/account" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="/useraddress" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            
+
+                <div class="col-md-8">
+                  <div class="card">
+                    <section class="content-body p-xl-4">
+                        <div class="row">
+                          <div class="col-lg-8">
+                            <form action="/account" enctype="multipart/form-data" method="post"
+                              onsubmit="return validationChecking()">
+                              <div class="row">
+  
+                                <div class="row gx-3">
+                                  <input type="hidden" name="user_id" value="<%=userData._id%>">
+                                  <div class="col-12  mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input class="form-control" name="name" value="<%=userData.name%>" id="user_name"
+                                      type="text" placeholder="Type here">
+                                    <div id="errorName" class="ms-2 text-danger"></div>
+                                  </div>
+  
+                                  <div class="col-lg-12  mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control" type="email" name="email" value="<%=userData.email%>"
+                                      id="user_email" placeholder="example@mail.com" disabled>
+                                    <div id="errorMail" class="ms-2 text-danger"></div>
+                                  </div>
+                                  <div class="col-lg-12  mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input class="form-control" type="tel" name="mobile" value="<%=userData.phone%>"
+                                      id="user_phone" placeholder="+1234567890">
+                                    <div id="errorMobile" class="ms-2 text-danger"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <br>
+                              <button class="btn btn-primary" type="submit">Save changes</button>
+                            </form>
+                          </div>
+                          <div class="col-lg-4">
+                            <form enctype="multipart/form-data" id="imageForm">
+                              <div class="input-upload mb-3">
+                                <% if (userData.image) { %>
+                                  <img src="/assets/imgs/user/<%=userData.image %>"alt="" id="imgView1"
+                                    style="width: 300px;">
+                                  <% } else { %>
+                                    <img src="/uploadimage.svg" alt="" id="imgView1" style="width: 300px;">
+                                    <% } %>
+                                      <input style="display: none;" class="form-data" type="file" name="image" id="input1"
+                                        accept="image/png, image/jpeg, image/jpg">
+                                      <label for="input1" class="btn btn-primary rounded font-md"
+                                        style="cursor: pointer; margin-top: 10px;">
+                                        <i class="fa-solid fa-upload"></i> Upload
+                                        Image
+                                      </label>
+                              </div>
+                              <div class="image-cropper mb-3" style="display:none; width: 300px;">
+                                <img src="" id="croppedImg1" alt="">
+                                <button type="button" id="saveButton1" class="btn btn-primary">Save</button>
+                              </div>
+                            </form>
+                          </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="tab-content dashboard-content">
-                                <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Hello Rosie! </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Your Orders</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Order</th>
-                                                            <th>Date</th>
-                                                            <th>Status</th>
-                                                            <th>Total</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>#1357</td>
-                                                            <td>March 45, 2020</td>
-                                                            <td>Processing</td>
-                                                            <td>$125.00 for 2 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>#2468</td>
-                                                            <td>June 29, 2020</td>
-                                                            <td>Completed</td>
-                                                            <td>$364.00 for 5 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>#2366</td>
-                                                            <td>August 02, 2020</td>
-                                                            <td>Completed</td>
-                                                            <td>$280.00 for 3 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Orders tracking</h5>
-                                        </div>
-                                        <div class="card-body contact-from-area">
-                                            <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
-                                            <div class="row">
-                                                <div class="col-lg-8">
-                                                    <form class="contact-form-style mt-30 mb-50" action="#" method="post">
-                                                        <div class="input-style mb-20">
-                                                            <label>Order ID</label>
-                                                            <input name="order-id" placeholder="Found in your order confirmation email" type="text" class="square">
-                                                        </div>
-                                                        <div class="input-style mb-20">
-                                                            <label>Billing email</label>
-                                                            <input name="billing-email" placeholder="Email you used during checkout" type="email" class="square">
-                                                        </div>
-                                                        <button class="submit submit-auto-width" type="submit">Track</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card mb-3 mb-lg-0">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Billing Address</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
-                                                    <p>New York</p>
-                                                    <a href="#" class="btn-small">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Shipping Address</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <address>4299 Express Lane<br>
-                                                        Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                    <p>Sarasota</p>
-                                                    <a href="#" class="btn-small">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Account Details</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
-                                            <form method="post" name="enq">
-                                                <div class="row">
-                                                    <div class="form-group col-md-6">
-                                                        <label>First Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="name" type="text">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Last Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="phone">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Display Name <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="dname" type="text">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Email Address <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="email" type="email">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Current Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="password" type="password">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>New Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="npassword" type="password">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label>Confirm Password <span class="required">*</span></label>
-                                                        <input required="" class="form-control square" name="cpassword" type="password">
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                          <div class="col-md d-flex justify-content-end">
+                            <article class="box m-3 bg-light d-flex">
+                              <h5>Referral Code: <%= userData.referralCode %>
+                              </h5>
+                            </article>
+                          </div>
+                   
                         </div>
-                    </div>
+                      </section>
+                  </div>
                 </div>
             </div>
+          </div>
         </div>
+      
     </section>
-</main>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+
+  <script>
+    document.getElementById('input1').addEventListener('change', function (event) {
+      let input = event.target;
+      let reader = new FileReader();
+
+      reader.onload = function () {
+        let dataURL = reader.result;
+        let image = document.getElementById('imgView1');
+        image.src = dataURL;
+
+        // Initialize Cropper.js on the image
+        let cropper = new Cropper(image, {
+          aspectRatio: 1,
+          viewMode: 1,
+          guides: true,
+          background: false,
+          autoCropArea: 1,
+          zoomable: true
+        });
+
+        // Show the image cropper container
+        let cropperContainer = document.querySelector('.image-cropper');
+        cropperContainer.style.display = 'block';
+
+        // Update the cropped image when the "Save" button is clicked
+        let saveButton = document.getElementById('saveButton1');
+        saveButton.addEventListener('click', function () {
+          // Get the cropped canvas data
+          const canvas = cropper.getCroppedCanvas();
+
+          if (!canvas) {
+            return;
+          }
+
+          // Convert the canvas to a Blob (in this case, to a JPEG file with quality 1.0)
+          canvas.toBlob(blob => {
+            const formData = new FormData();
+            formData.append('croppedImage', blob, 'cropped-image.jpg');
+
+            // Append any other necessary data to the form (if needed)
+            // formData.append('otherField', otherValue);
+
+            // Submit the form data to the backend using Fetch API or XMLHttpRequest
+            fetch('/updateprofilepic', {
+              method: 'POST',
+              body: formData
+            })
+              .then(response => {
+                console.log("hghjg")
+                if (response.ok) {
+                  console.log('Cropped image submitted successfully!');
+                  window.location.reload();
+                } else {
+                    console.log("hghjgdfdfdf")
+
+                  console.error('Failed to submit cropped image.');
+                  // Optionally, handle failed submission
+                }
+              })
+              .catch(error => {
+                console.error('Error submitting cropped image:', error);
+              });
+          }, 'image/jpeg'); // Set the desired image format here
+        });
+      };
+      reader.readAsDataURL(input.files[0]);
+    });
+  </script>
+  <script>
+
+    // Image preview
+    document.getElementById('fileUpload').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('previewImage').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const user_name = document.getElementById("user_name");
+      const errorName = document.getElementById("errorName");
+      const user_phone = document.getElementById("user_phone");
+      const errorMobile = document.getElementById("errorMobile");
+      const fileUpload = document.getElementById("fileUpload");
+      const errorfileUpload = document.getElementById("errorfileUpload");
+      const password = document.getElementById("password");
+      const errorpassword = document.getElementById("errorpassword");
+      const cpassword = document.getElementById("cpassword");
+      const errorcpassword = document.getElementById("errorcpassword");
+
+
+      user_name.addEventListener('input', function () {
+        errorName.innerHTML = user_name.value.trim() === "" ? "Please enter user name" : /^[a-zA-Z ]+$/.test(user_name.value) == false ? "Please enter alphabets only" : "";
+      });
+
+      user_phone.addEventListener('input', function () {
+        errorMobile.innerHTML = user_phone.value.trim() === "" ? "Please enter user phone number" : /^\d{10}$/.test(user_phone.value) == false ? "Please enter valid phone number" : "";
+      });
+
+      password.addEventListener('input', function () {
+        errorpassword.innerHTML = password.value.trim() === "" ? "Please enter password" : password.value.length < 8 ? "Please enter a minimum of 8 characters" : "";
+      });
+      cpassword.addEventListener('input', function () {
+        errorcpassword.innerHTML = cpassword.value.trim() === "" ? "Please enter password" : (cpassword.value !== password.value) ? "Passwords do not match" : "";
+      });
+
+
+    });
+    function validationChecking(event) {
+      const user_name = document.getElementById("user_name");
+      const errorName = document.getElementById("errorName");
+      const user_phone = document.getElementById("user_phone");
+      const errorMobile = document.getElementById("errorMobile");
+      const fileUpload = document.getElementById("fileUpload");
+      const errorfileUpload = document.getElementById("errorfileUpload");
+
+      errorName.innerHTML =
+        user_name.value.trim() === ""
+          ? "Please enter user name"
+          : /^[a-zA-Z ]+$/.test(user_name.value) == false
+            ? "Please enter alphabets only"
+            : "";
+      errorMobile.innerHTML =
+        user_phone.value.trim() === ""
+          ? "Please enter user phone number"
+          : /^\d{10}$/.test(user_phone.value) == false
+            ? "Please enter valid phone number"
+            : "";
+
+      const uploadedFile = fileUpload.files[0];
+      const existingImage = document.getElementById("previewImage");
+      const defaultImageSrc = existingImage.getAttribute("src");
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+        "image/webp",
+
+      ];
+
+      if (uploadedFile) {
+        if (!allowedTypes.includes(uploadedFile.type)) {
+          errorfileUpload.innerHTML = "Please upload a valid image file (JPEG, PNG, GIF)";
+
+          return false;
+        }
+      } else {
+        // If no new file is selected, maintain the existing image
+        existingImage.setAttribute("src", defaultImageSrc);
+      }
+
+      if (errorName.innerHTML || errorMobile.innerHTML) return false;
+
+      return true;
+    }
+
+    function validationPasswordChecking(event) {
+      const password = document.getElementById("password");
+      const errorpassword = document.getElementById("errorpassword");
+      const cpassword = document.getElementById("cpassword");
+      const errorcpassword = document.getElementById("errorcpassword");
+      errorpassword.innerHTML = password.value.trim() === "" ? "Please enter password" : password.value.length < 8 ? "Please enter a minimum of 8 characters" : "";
+      errorcpassword.innerHTML = cpassword.value.trim() === "" ? "Please enter password" : (cpassword.value !== password.value) ? "Passwords do not match" : "";
+
+      if (errorpassword.innerHTML || errorcpassword.innerHTML) return false;
+
+      return true;
+    }
+  </script>
 
 
 

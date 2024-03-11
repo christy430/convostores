@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer')
     try {
  
       const otp = generateOTP(4); 
-      console.log(otp);
+      console.log(otp,"kkkkkk");
       console.log(email);
       req.session.otp = otp;
       req.session.otpGeneratedTime = Date.now();

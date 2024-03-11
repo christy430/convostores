@@ -5,6 +5,8 @@ const authentication=require('../middlewares/userauthentication')
 const addresscontroller=require('../controller/addresscontroller');
 const checkoutcontroller=require('../controller/checkoutcontroller');
 const cartcontroller= require('../controller/cartcontroller')
+const multer=require('../middlewares/multer');
+
 // const passport=require('passport');
 // require('../passport');
 
@@ -34,9 +36,15 @@ router.post('/signup',usercontroller.postsignup);
 
 //account
 router.get('/account',usercontroller.accounthome);
+router.post('/account',multer.uploadUser.single('image'),usercontroller.useredit);
+router.post('/updateprofilepic',multer.uploadUser.single('croppedImage'),usercontroller.updateprofilepicture);
+
 
 //google sign-up
 // router.post('/signup/google',usercontroller.googleSignIn);
+
+
+//user
 
 
 //otp
@@ -47,13 +55,16 @@ router.get('/resendotp',usercontroller.resendotp)
 
 //forgot password
 router.get('/forgotpassword',usercontroller.loadforgotpassword);
+router.post('/forgotpassword',usercontroller.forgotpassword);
+router.get('/resetpassword',usercontroller.loadresetpassword);
+router.post('/resetpassword',usercontroller.resetPassword);
 
 //adress
 router.get('/useraddress',addresscontroller.loadaddress)
 router.get('/addaddress',addresscontroller.loadaddaddress);
-router.post('/addaddress',addresscontroller.loadaddaddress);
-router.get('/editadress',addresscontroller.editaddress);
-router.get('/editaddress',addresscontroller.editaddress);
+router.post('/addaddress',addresscontroller.addaddress);
+router.get('/editaddress',addresscontroller.loadeditaddress);
+router.post('/editaddress',addresscontroller.editaddress);
 router.get('/deleteaddress',addresscontroller.deleteaddress);
 
 //order

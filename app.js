@@ -6,9 +6,14 @@ const session=require('express-session');
 const path = require('path');
 
 const cookieParser = require('cookie-parser');
-const mongoose=require('mongoose');
+
 const bcrypt=require('bcrypt');
 const passport=require('./passport');
+
+
+//mongodb
+const mongodb=require('./config/mongo');
+
 
 //google
 
@@ -20,15 +25,10 @@ const app = express();
 const port = 3000
 
 dotenv.config()
-//database connection
-const connect=mongoose.connect('mongodb://127.0.0.1:27017/project');
-connect 
-.then(()=>{
-  console.log("Mongodb server is connected");
-})
-.catch(()=>{
-  console.log("Mongodb is not connected");
-})
+
+
+mongodb.connectDb();
+
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -99,4 +99,3 @@ app.listen(port, () => {
 });
 
 
-module.exports = app;

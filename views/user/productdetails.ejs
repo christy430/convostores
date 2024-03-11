@@ -57,7 +57,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
+                    <a href="/" rel="nofollow">Home</a>
                     <span></span> Running   
                     <span></span> Platform
                 </div>
@@ -73,7 +73,7 @@
                         <div class="product-detail accordion-detail">
                             <div class="row mb-50">
                                 <div class="col-1 custom-col d-flex  flex-column justify-content-center">
-                                    <% for (let i = 0; i < product.image.length; i++) {%>        
+                                    <% for (let i = 0; i <5; i++) {%>        
                           
                                     <img src='/assets/imgs/productIMG/<%= product.image[i]%>' onclick="changeMainImage('<%= product.image[i] %>')" alt="Thumbnail" class="my-3 thumbnail">
                                     <% } %>        

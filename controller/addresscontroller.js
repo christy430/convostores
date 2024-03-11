@@ -8,7 +8,7 @@ const loadaddress=async(req,res)=>{
 
         if(userData){
             const addressData= await address.find({user:userId});
-            res.render('./user/addadress',{userData,addressData});
+            res.render('user/address',{userData,addressData});
         }else{
             res.redirect('/login');
         }
@@ -24,7 +24,7 @@ const loadaddaddress= async(req,res)=>{
     try{
         const userid= req.session.user_id;
         const userData= await User.findById(userid);
-        console.log(userid,userData,"userid and userdata from adress controller");
+        // console.log(userid,userData,"userid and userdata from adress controller");
         if(userData){
             res.render('user/addadress',{userData});
         }else{
@@ -40,7 +40,7 @@ const addaddress= async(req,res)=>{
         const userid= req.session.user_id;
         const{housename,street,city,state,pincode}=req.body;
         console.log(userid,"from add address");
-        const address= new address({
+        const newAddress= new address({
             user:userid,
             housename,
             street,
@@ -49,12 +49,27 @@ const addaddress= async(req,res)=>{
             pincode,
             is_listed:true
         });
-        const addressData= await address.save();
+        const addressData= await newAddress.save();
+        console.log(addressData);
         res.redirect('/useraddress');
     }catch(error){
         console.log(error);
     }
 }
+
+const loadeditaddress= async(req,res)=>{
+    try{
+        const userId= req.session.user_id;
+        console.log(userId,"userid from editaddress");
+        const user= await User.findById(userId);
+        const id= req.query.id;
+        const Address= await address.findById(id);
+        res.render('user/editaddress',{user,Address});
+    }catch(error){
+        console.log(error);
+    }
+}
+
 
 const editaddress= async(req,res)=>{
     try{
@@ -83,6 +98,7 @@ const editaddress= async(req,res)=>{
 const deleteaddress= async(req,res)=>{
     try{
         const id= req.query.id;
+        console.log(id,"from deleteaddress  ");
         const addressData= await address.findByIdAndUpdate(
             {_id:id},
             {
@@ -91,6 +107,7 @@ const deleteaddress= async(req,res)=>{
                 }
             }
         );
+        res.redirect('/useraddress');
     }catch(error){
         console.log(error);
     }
@@ -100,6 +117,7 @@ module.exports={
     loadaddress,
     loadaddaddress,
     addaddress,
+    loadeditaddress,
     editaddress,
     deleteaddress
 };

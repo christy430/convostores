@@ -16,29 +16,30 @@ const multer=require('../middlewares/multer');
 /* GET home page. */
 admin_route.get('/',adminauthentication.islogout,admincontroller.adminlogin);
 admin_route.post('/',admincontroller.verifylogin)
-admin_route.get('/home',adminauthentication.isLogin,admincontroller.adminhome);
-admin_route.get('/usermanage',adminauthentication.isLogin,admincontroller.usermanage);
-admin_route.get('/unlistUser',adminauthentication.isLogin,admincontroller.listuser);
+admin_route.use(adminauthentication.isLogin)
+admin_route.get('/home',admincontroller.adminhome);
+admin_route.get('/usermanage',admincontroller.usermanage);
+admin_route.get('/unlistUser',admincontroller.listuser);
 
-admin_route.get('/logout',adminauthentication.isLogin,admincontroller.adminlogout)
+admin_route.get('/logout',admincontroller.adminlogout)
 
 
 //category routes
-admin_route.get('/category',adminauthentication.isLogin,categorycontroller.loadcategory)
-admin_route.get('/addcategory',adminauthentication.isLogin,categorycontroller.loadcategoryform);
+admin_route.get('/category',categorycontroller.loadcategory)
+admin_route.get('/addcategory',categorycontroller.loadcategoryform);
 admin_route.post('/addcategory',multer.uploadCategory.single("image"),categorycontroller.addcategory);
-admin_route.get('/unlistCategory',adminauthentication.isLogin,categorycontroller.unlistcategory);
-admin_route.get('/editcategory',adminauthentication.isLogin,categorycontroller.editcategoryhome);
+admin_route.get('/unlistCategory',categorycontroller.unlistcategory);
+admin_route.get('/editcategory',categorycontroller.editcategoryhome);
 admin_route.post('/editcategory',multer.uploadCategory.single("image"),categorycontroller.editcategory);
 
 //product routes
-admin_route.get('/product',adminauthentication.isLogin,productcontroller.loadproducthome);
-admin_route.get('/addproduct',adminauthentication.isLogin,productcontroller.loadproduct)
+admin_route.get('/product',productcontroller.loadproducthome);
+admin_route.get('/addproduct',productcontroller.loadproduct)
 admin_route.post('/addproduct',multer.uploadProduct.array("image"),productcontroller.addproduct)
-admin_route.get('/deleteProduct/:id',adminauthentication.isLogin,productcontroller.deleteProduct)
-admin_route.get('/editproduct',adminauthentication.isLogin,productcontroller.editproducthome);
+admin_route.get('/deleteProduct/:id',productcontroller.deleteProduct)
+admin_route.get('/editproduct',productcontroller.editproducthome);
 admin_route.post('/editproduct',multer.uploadProduct.array("image"),productcontroller.editproduct);
 //order routes
-admin_route.get('/order',adminauthentication.isLogin,ordercontroller.loadorders)
+admin_route.get('/order',ordercontroller.loadorders)
 
 module.exports = admin_route;

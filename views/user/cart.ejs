@@ -22,7 +22,7 @@
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">
-                <a href="index.html" rel="nofollow">Home</a>
+                <a href="/" rel="nofollow">Home</a>
                 <span></span> Shop
                 <span></span> Your Cart
             </div>
@@ -134,7 +134,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                <% } %>
+                                    <% } else { %>
+                                        <!-- Display "Cart is empty" heading when the cart is empty -->
+                                        <div class="empty-cart-heading">
+                                            <h3>Cart is Empty</h3>
+                                            <p>Explore our collection and add items to your cart.</p>
+                                        </div>
+                                    <% } %>
                                 
     </section>
 </main>

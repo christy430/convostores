@@ -20,6 +20,10 @@ phone:{
     type:Number,
     required:true
 },
+image:{
+  type:String
+ 
+},
 is_admin:{
     type:Number,
     required:true
