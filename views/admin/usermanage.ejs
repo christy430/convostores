@@ -1,116 +1,74 @@
 <%-include('../layout/adminheader') %>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
-        <section class="content-main">
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">User List</h2>
-                    <!-- <p>Lorem ipsum dolor sit amet.</p> -->
-                
-                </div>
-                
-            </div>
-            <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row align-items-center" >
-         
-                <form action="" method="get">
-
-                    <div style="display: flex;  align-items: center;">
+<section class="content-main">
+  <div class="content-header">
+      <div>
+          <h2 class="content-title card-title">User List</h2>
+      </div>
+  </div>
+  <div class="card mb-4">
+      <header class="card-header">
+          <div class="row align-items-center">
+              <form action="" method="get">
+                  <div style="display: flex; align-items: center;">
                       <input type="text" id="searchInput" class="form-control" placeholder="Search for products...">
-
-                
                       <div class="col-md-3 col-12 me-auto mb-md-0 mb-3" style="display: flex;">
-
-                        <label for="status" class="form-control">Select Status:</label>
-                        <select name="status" class="form-select" id="status">
-                            <option value="" selected>All</option>
-                            <option value="listed">Listed</option>
-                            <option value="unlisted">Unlisted</option>
-                        </select>
+                          <label for="status" class="form-control">Select Status:</label>
+                          <select name="status" class="form-select" id="status">
+                              <option value="" selected>All</option>
+                              <option value="listed">Listed</option>
+                              <option value="unlisted">Unlisted</option>
+                          </select>
                       </div>
-     
-                        <input type="submit" class="btn btn-sm font-sm rounded btn-brand" value="Filter">
-
+                      <input type="submit" class="btn btn-sm font-sm rounded btn-brand" value="Filter">
                   </div>
-                </form>
-           
-
-
-
-                  </div>
-                </header>
-            
-        <div class="card-body">
-                   
-        <table id="products" class="table">
-            <thead>
-              <tr>
-                <!-- <th scope="col"></th> -->
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone Number</th>
-           
-              </tr>
-            </thead>
-            <tbody>
-              <%
-                if (user.length > 0) {
-                  
-    
-                  user.forEach(user => {
-            %>
-            <tr>
-             
-              <td>
-                <div class="d-flex align-items-center">
-                       
-                              <div class="ms-3">
-                                <p class="fw-bold mb-1"><%= user.name %></p>
-                            
-                              </div>
-                            </div>
-               
-              </td>
-        <td>
-          <span><%= user.email %></span>
-              
-              </td>
-              <td>
-                <span><%= user.phone %></span>
-              </td>
-
-         
-         
-
-              <td>
-                  <a onclick="toggleUserListStatus(event, '<%= user._id %>', '<%= user.is_blocked == 0 ?"unlisted":"listed"%>')" 
-                    class="btn btn-sm font-sm rounded <%= user.is_blocked == 0 ? 'btn-danger' : 'btn-brand' %>">
-                    <i class="material-icons md-edit"></i>
-                    <%= user.is_blocked == 0 ? 'Unlist' : 'List' %>
-                  </a>  
-              </td>
-
-            </tr>
-            <%
-              });
-                } else {
-                  %>
+              </form>
+          </div>
+      </header>
+      <div class="card-body">
+          <table id="products" class="table">
+              <thead>
                   <tr>
-                    <td colspan="6">
-                      <p>User not found</p>
-                    </td>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone Number</th>
                   </tr>
-                  <%
-                }
-              %>
-            </tbody>
+              </thead>
+              <tbody>
+                  <% if (user.length > 0) { 
+                      user.forEach(user => { %>
+                          <tr>
+                              <td>
+                                  <div class="d-flex align-items-center">
+                                      <div class="ms-3">
+                                          <p class="fw-bold mb-1"><%= user.name %></p>
+                                      </div>
+                                  </div>
+                              </td>
+                              <td><span><%= user.email %></span></td>
+                              <td><span><%= user.phone %></span></td>
+                              <td>
+                                  <a onclick="toggleUserListStatus(event, '<%= user._id %>', '<%= user.is_blocked === 0 ? "unlisted" : "listed" %>')" 
+                                      class="btn btn-sm font-sm rounded <%= user.is_blocked == 0 ? 'btn-danger' : 'btn-brand' %>">
+                                      <i class="material-icons md-edit"></i>
+                                      <%= user.is_blocked === 0 ? 'Unlist' : 'List' %>
+                                  </a>
+                              </td>
+                          </tr>
+                  <% }); } else { %>
+                      <tr>
+                          <td colspan="4">
+                              <p>User not found</p>
+                          </td>
+                      </tr>
+                  <% } %>
+              </tbody>
           </table>
-          
-                </div> 
-            </div> 
-      
-        </section>
+      </div>
+  </div>
+</section>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

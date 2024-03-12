@@ -85,6 +85,7 @@ const listuser = async (req, res) => {
         );
   
         if (req.session.user_id) delete req.session.user_id;
+        
       } else {
         await user.updateOne(
           { _id: id }, // Assuming your user schema uses "_id" for the ObjectId
