@@ -8,7 +8,7 @@ const loadaddress=async(req,res)=>{
 
         if(userData){
             const addressData= await address.find({user:userId});
-            res.render('user/address',{userData,addressData});
+            res.render('user/address',{user:userId,userData,addressData});
         }else{
             res.redirect('/login');
         }
@@ -26,7 +26,7 @@ const loadaddaddress= async(req,res)=>{
         const userData= await User.findById(userid);
         // console.log(userid,userData,"userid and userdata from adress controller");
         if(userData){
-            res.render('user/addadress',{userData});
+            res.render('user/addadress',{user:userData});
         }else{
             res.redirect('/login');
         }

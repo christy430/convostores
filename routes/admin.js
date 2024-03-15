@@ -39,7 +39,10 @@ admin_route.post('/addproduct',multer.uploadProduct.array("image"),productcontro
 admin_route.get('/deleteProduct/:id',productcontroller.deleteProduct)
 admin_route.get('/editproduct',productcontroller.editproducthome);
 admin_route.post('/editproduct',multer.uploadProduct.array("image"),productcontroller.editproduct);
+
 //order routes
-admin_route.get('/order',ordercontroller.loadorders)
+admin_route.get('/order',ordercontroller.loadorders);
+admin_route.get('/orderdetails',ordercontroller.listOrderDetails);
+admin_route.put('/orderstatuschange',ordercontroller.orderStatusChange);
 
 module.exports = admin_route;

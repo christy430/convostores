@@ -68,12 +68,17 @@ router.post('/editaddress',addresscontroller.editaddress);
 router.get('/deleteaddress',addresscontroller.deleteaddress);
 
 //order
-router.get('/checkout',checkoutcontroller.loadcheckout)
+router.get('/checkout',authentication.isLogin,checkoutcontroller.loadcheckout);
+router.post('/checkout',authentication.isLogin,checkoutcontroller.postcheckout)
+router.get('/ordersuccess',authentication.isLogin,checkoutcontroller.laoadOrderdetails)
+router.get('/orderdetails/:id',authentication.isLogin,checkoutcontroller.orderdetails);
+router.post('/cancelorder',authentication.isLogin,checkoutcontroller.cancelorder);
 
 //cart
 router.get('/cart',authentication.isLogin,cartcontroller.loadcart);
 router.post('/cart',authentication.isLogin,cartcontroller.addtocart);
 router.put('/updatecart',authentication.isLogin,cartcontroller.updatecart)
 router.delete('/removefromcart',authentication.isLogin,cartcontroller.removefromcart);
+
 
 module.exports = router;

@@ -45,7 +45,7 @@ const loadcart= async(req,res)=>{
                     }
                 }
                 console.log( subtotalwithshipping,"const subtotalwithshipping")
-                res.render('./user/cart',{userdata,productTotal,subtotalwithshipping,outofstockerror,maxquantityerror,cart});  
+                res.render('./user/cart',{ user:userdata,productTotal,subtotalwithshipping,outofstockerror,maxquantityerror,cart});  
             }else{
                 res.render('./user/cart',{userdata,cart:null,subtotalwithshipping:0});
             }
@@ -118,26 +118,19 @@ const addtocart = async (req, res) => {
   
 const updatecart= async(req,res)=>{
     try{
-        // console.log("in updatecart")
-        
+       
         const userid=req.session.user_id;
-        // console.log(userid,"userid");
-
+        
         const productid=req.query.productId;
-        // console.log(productid,"from cart controller prdocut id");
 
 
         const{newQuantity,newSize}=req.body;
 
         let newsizeData=parseInt(newSize,10)
-        console.log(newsizeData,"newsizedata");
 
         const existingcart= await cart.findOne({user:userid}).populate("items.product");
-        // console.log(existingcart,"existingcart")
         const productToupdate= await product.findById(productid);
-        // console.log(productToupdate,"productToupdate")
         const selectedsize= productToupdate.sizes.find((s)=>s.size === newSize);
-        // console.log(selectedsize,"selectedsize");
 
         if(selectedsize && selectedsize.stock>=parseInt(newQuantity)){
             console.log("in if loop in cartcontroller");

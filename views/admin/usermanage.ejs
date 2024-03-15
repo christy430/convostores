@@ -49,8 +49,11 @@
                               <td><span><%= user.email %></span></td>
                               <td><span><%= user.phone %></span></td>
                               <td>
-                                  <a onclick="toggleUserListStatus(event, '<%= user._id %>', '<%= user.is_blocked === 0 ? "unlisted" : "listed" %>')" 
-                                      class="btn btn-sm font-sm rounded <%= user.is_blocked == 0 ? 'btn-danger' : 'btn-brand' %>">
+                                  <a  
+                                      class="block-btn btn btn-sm font-sm rounded d-flex align-items-center justify-content-around w-50 <%= user.is_blocked == 0 ? 'btn-danger' : 'btn-brand' %>"
+                                      userId="<%=user._id%>"
+                                        isBlocked="<%= user.is_blocked === 0 ? 'unlisted' : 'listed' %>"
+                                      >
                                       <i class="material-icons md-edit"></i>
                                       <%= user.is_blocked === 0 ? 'Unlist' : 'List' %>
                                   </a>
@@ -93,24 +96,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+const blockBtns = document.querySelectorAll('.block-btn')
+blockBtns.forEach(btn =>{
+    const userId = btn.getAttribute('userId')
+    
+    btn.addEventListener('click',(event) =>{
+        const currentStatus = btn.getAttribute('isBlocked');
+        console.log(currentStatus)
+        console.log('click listener ---')
+        toggleUserListStatus(event,userId,currentStatus)
+        
+    })
+})
+
 
       
 function toggleUserListStatus(event, userId, currentStatus) {
+    console.log(event.target.getAttribute('isBlocked','elonma'))
     let titleText, confirmText, successText, buttonText, buttonColor, action;
 
     if (currentStatus === 'unlisted') {
+        console.log('setting to list')
         titleText = "Are you sure?";
         confirmText = "Please confirm to unblock this user!";
         successText = "User has been unblocked";
         buttonText = "List";
-        buttonColor = "#d33";
+        buttonColor = "#000000";
         action = 'list';
     } else {
+        console.log('setting to unlisted')
         titleText = "Are you sure?";
         confirmText = "Please confirm to block this user!";
         successText = "User has been blocked";
         buttonText = "Unlist";
-        buttonColor = "#3085d6";
+        buttonColor = "#ff0000";
         action = 'unlist';
     }
 
@@ -140,8 +159,10 @@ function toggleUserListStatus(event, userId, currentStatus) {
                         showConfirmButton: false,
                     }).then(() => {
                         // Update the button text
-                        event.target.innerText = buttonText;
+                        event.target.innerHTML = `<i class="material-icons md-edit"></i>` + buttonText  ;
                         // Update the button background color
+                        event.target.setAttribute('isBlocked',currentStatus === 'listed' ? 'unlisted':'listed')
+                     
                         event.target.style.backgroundColor = buttonColor;
                     });
                 } else {

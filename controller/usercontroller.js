@@ -300,7 +300,7 @@ const accounthome= async(req,res)=>{
     const userId = req.session.user_id;
     const userData = await User.findById(userId);
 
-    res.render('./user/acoount',{userId,userData});
+    res.render('./user/acoount',{user:userId,userData});
   }catch(error){
     console.log(error);
   }
@@ -392,16 +392,16 @@ const useredit= async (req,res)=>{
     console.log(req.body,"req.body from usercontroller");
     let id= req.body.user_id;
     const userData= await User.findById(id);
-    // console.log(userData,"userdata from useredit userconmtroller")
-    const{name,phone}=req.body;
-  
+    console.log(userData,"userdata from useredit userconmtroller")
+    const{name,mobile}=req.body;
+  console.log(req.body,"kkk");
     if(!req.file){
       const updatedata= await User.findByIdAndUpdate(
         {_id:id},
         {
           $set:{
             name,
-            phone,
+            phone:mobile,
           },
         }
       );
@@ -411,7 +411,7 @@ const useredit= async (req,res)=>{
         {
           $set:{
             name,
-            phone,
+            phone:mobile,
             image:req.file.filename,
           },
         }

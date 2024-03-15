@@ -1,24 +1,4 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:07 GMT -->
-<head>
-    <meta charset="utf-8">
-    <title>convo</title>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/public/assets/imgs/theme/Converse_logo.svg">
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-</head>
-
+<%- include('../layout/userheader', { user: user }) %>
 <main class="main">
     <div class="page-header breadcrumb-wrap">
       <div class="container">
@@ -41,26 +21,26 @@
               <div class="col-md-4">
                 <div class="dashboard-menu">
                   <ul class="nav flex-column" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="/account" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="/useraddress" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
-                    </li>
-                </ul>
-                </div>
+                      <li class="nav-item">
+                          <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="/account" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="/ordersuccess" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="/useraddress" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                      </li>
+                  </ul>
+              </div>
               </div>
               <div class="col-md-8">
 
@@ -76,7 +56,7 @@
 
 
                       <div class="form-group">
-                        <input type="text" id="houseName" name="houseName" placeholder="Enter Name" />
+                        <input type="text" id="houseName" name="houseName" placeholder="Enter HouseName" />
                         <div id="errorhouseName" class="ms-2 text-danger"></div>
                       </div>
                       <div class="form-group ">
@@ -151,24 +131,36 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function validationChecking() {
   const houseName = document.getElementById("houseName");
-  const errorhouseName = document.getElementById("errorhouseName");
   const street = document.getElementById("street");
-  const errorstreet = document.getElementById("errorstreet");
   const city = document.getElementById("city");
-  const errorcity = document.getElementById("errorcity");
   const state = document.getElementById("state");
-  const errorstate = document.getElementById("errorstate");
   const pincode = document.getElementById("pincode");
+  const errorhouseName = document.getElementById("errorhouseName");
+  const errorstreet = document.getElementById("errorstreet");
+  const errorcity = document.getElementById("errorcity");
+  const errorstate = document.getElementById("errorstate");
   const errorpincode = document.getElementById("errorpincode");
-
   let isValid = true;
 
-  errorhouseName.innerHTML = houseName.value.trim() === "" ? "Please enter home name" : /^[a-zA-Z ]+$/.test(houseName.value) == false ? "Please enter alphabets only" : "";
-  errorstreet.innerHTML = street.value.trim() === "" ? "Please enter street name" : /^[a-zA-Z ]+$/.test(street.value) == false ? "Please enter alphabets only" : "";
-  errorcity.innerHTML = city.value.trim() === "" ? "Please enter city name" : /^[a-zA-Z ]+$/.test(city.value) == false ? "Please enter alphabets only" : "";
-  errorstate.innerHTML = state.value.trim() === "" ? "Please enter state name" : /^[a-zA-Z ]+$/.test(state.value) == false ? "Please enter alphabets only" : "";
-  errorpincode.innerHTML = pincode.value.trim() === "" ? "Please enter pincode" : /^\d{6}$/.test(pincode.value) == false ? "Please enter valid pincode" : "";
+  // Validation for each input field
+  errorhouseName.innerHTML = houseName.value.trim() === "" ? "Please enter home name" : "";
+  errorstreet.innerHTML = street.value.trim() === "" ? "Please enter street name" : "";
+  errorcity.innerHTML = city.value.trim() === "" ? "Please enter city name" : "";
+  errorstate.innerHTML = state.value.trim() === "" ? "Please enter state name" : "";
+  errorpincode.innerHTML = pincode.value.trim() === "" ? "Please enter pincode" : "";
 
+  // Check for duplicate address
+  const enteredAddress = `${houseName.value.trim()}, ${street.value.trim()}, ${city.value.trim()}, ${state.value.trim()}, ${pincode.value.trim()}`;
+  const existingAddresses = document.querySelectorAll(".card-body address");
+  existingAddresses.forEach(existingAddress => {
+    const addressText = existingAddress.textContent.trim();
+    if (addressText === enteredAddress) {
+      alert("This address already exists.");
+      isValid = false;
+    }
+  });
+
+  // Check if any error message is present
   if (
     errorhouseName.innerHTML ||
     errorstreet.innerHTML ||
@@ -190,3 +182,5 @@ function validationChecking() {
 
 
 </script>
+
+<%-include('../layout/userfooter')  %>

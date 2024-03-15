@@ -19,7 +19,7 @@ const cartitem= new mongoose.Schema({
 const cart= new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user',
+        ref:'User',
         required:true
     },
     items:[cartitem],

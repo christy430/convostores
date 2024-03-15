@@ -2471,33 +2471,33 @@ label {
 }
 
 /*page header*/
-.page-header .page-title {
-  font-weight: 900;
-  font-size: 4rem;
-}
-
 .page-header.breadcrumb-wrap {
-  padding: 20px;
-  background-color: #f7f8f9;
+  background-color: white; /* Set background color to white */
+  border: none; /* Remove border */
+  text-align: center; /* Center the content */
+  padding: 20px 0; /* Add padding for spacing */
 }
 
-.page-header .breadcrumb {
+.page-header.breadcrumb-wrap .container {
+  display: flex;
+  justify-content: center;
+}
+
+.page-header.breadcrumb-wrap .breadcrumb {
   display: inline-block;
   padding: 0;
-  text-transform: capitalize;
-  color: #6e6e6e;
-  font-size: 0.875rem;
-  background: none;
   margin: 0;
-  border-radius: 0;
+  list-style: none;
 }
 
-.page-header .breadcrumb span {
-  position: relative;
-  text-align: center;
-  padding: 0 10px;
+.page-header.breadcrumb-wrap .breadcrumb a {
+  color: #333; /* Set breadcrumb link color */
+  text-decoration: none;
 }
 
+.page-header.breadcrumb-wrap .breadcrumb a:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
 .page-header .breadcrumb span::before {
   content: "\f111";
   font-family: "uicons-regular-straight"  !important;
@@ -7569,10 +7569,15 @@ span.fi-rs-apps {
   margin: 0 8px 10px 0;
   border: 1px solid #e2e9e1;
 }
-
 .newsletter {
-  background-color: #aeccc5;
+  background-color: black; /* Set background color to black */
+  padding: 1px; /* Adjust padding as needed */
+  border-top: 1px solid white; /* Add a thin white border at the top */
+  border-bottom: 1px solid white; /* Add a thin white border at the bottom */
 }
+
+
+
 
 .newsletter .icon-email {
   max-width: 40px;

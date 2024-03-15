@@ -14,12 +14,13 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/Converse_logo.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/Converse_logo.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
+    
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -30,49 +31,48 @@
             </div>
         </div>
     </div>
-    <section class="pt-150 pb-150" >
+    <section class="pt-150 pb-150 " >
         <div class="container" >
             <div class="row">
                 <div class="col-lg-10 m-auto">
-                    <div class="row" >
-                        <div class="col-lg-3"></div>
+                    <div class="row">
+                        <div class="col-lg-6 d-flex align-items-center ">
+                            <img src="assets/imgs/slider/slider-4.png" alt="Image" class="w-100 h-100 img-fluid" style="object-fit: cover;">
+                        </div>
+                    
                         <div class="col-lg-6">
-                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10">
                                 <div class="padding_eight_all bg-white">
                                     <div class="heading_s1">
-                                        <h3 class="mb-30">Login</h3>
+                                        <h3 class="mb-4">Login</h3>
                                     </div>
                                     <form method="post" action="/login">
                                         <div class="form-group">
                                             <input type="text" required="" name="email" placeholder="Your Email">
                                         </div>
                                         <%if(locals.alert){%>
-                                            <div class="alert  alert-success text-dark  text-center" id="alert">
+                                            <div class="alert alert-success text-dark text-center" id="alert">
                                                 <%=alert%>
                                             </div>
                                         <%}%>
                                         <div class="form-group">
                                             <input required="" type="password" name="password" placeholder="Password">
                                         </div>
-                                        
                                         <div class="login_footer form-group">
-                                            
-                                            <a  href="/forgotpassword">Forgot password?</a>
+                                            <a href="/forgotpassword">Forgot password?</a>
                                         </div>
                                         <div class="form-group d-flex justify-content-center">
                                             <button type="submit" class="btn btn-dark btn-block hover-up" name="login">Log in</button>
                                         </div>
-                                        
                                         <div class="createaccount">
-                                            <p>Don't have an account?<a href="/signup">Create account</a></p>
+                                            <p>Don't have an account? <a href="/signup">Create account</a></p>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3"></div>
-                      
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -97,12 +97,12 @@ const editcategory= async(req,res)=>{
     try{
         let id=req.body.category_id;
         console.log(id,"from editcategiry try block");
-        const existingcategory= await category.findOne({name:{$regex: new RegExp(`^{req.body.name}$`,'i')},_id:{$ne:id}});
-        console.log(existingcategory);
+        const existingcategory= await category.findOne({name:{$regex: new RegExp(`^${req.body.name}$`,'i')},_id:{$ne:id}});
+        console.log(existingcategory,"kkkk");
         if(existingcategory){
             console.log("in if block");
             return res.render('admin/editcategory',{
-                alert:"category name already exists",
+                error: "Category name already exists",
                 category:existingcategory
             });
         }
@@ -129,7 +129,7 @@ const editcategory= async(req,res)=>{
                     },
                 }
             );
-            console.log(categorydata);
+        
         }
         res.redirect('/admin/category')
     }catch(error){
