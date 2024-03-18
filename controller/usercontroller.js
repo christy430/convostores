@@ -43,9 +43,9 @@ const loadSingleShop = async (req, res) => {
     const productdata = await product.findById(productId);
     const categories = await category.find();
 console.log(productdata,categories,'end');
-    if (!userData) {
-      return res.status(404).send("User not found");
-    }
+    // if (!userData) {
+    //   return res.status(404).send("User not found");
+    // }
 
 
     if (!productdata) {
@@ -57,11 +57,12 @@ console.log(productdata,categories,'end');
       return res.status(404).send("Categories not found");
     }
 
-    res.render("./user/productdetails", { user:userData, product:productdata, categories });
+    res.render("./user/productdetails", { user:userData || null, product:productdata, categories });
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 //render login page
 const loadlogin=async(req,res)=>{

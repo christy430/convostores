@@ -6,7 +6,7 @@ const address=new mongoose.Schema({
         ref:'User',
         required:true,
     },
-    housename:{
+    houseName:{
         type:String,
     },
     street:{

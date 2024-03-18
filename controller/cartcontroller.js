@@ -86,7 +86,7 @@ const addtocart = async (req, res) => {
                 size,
               });
             }
-            console.log("producttoupdate from cartcontroller")
+            console.log("product to update from cartcontroller")
 
             existingcart.total = existingcart.items.reduce((total, item) => total + (item.quantity || 0), 0);
               await existingcart.save();
@@ -139,6 +139,8 @@ const updatecart= async(req,res)=>{
             if(existingcart && existingcartitem.size===newsizeData){
 
                 existingcartitem.quantity=parseInt(newQuantity);
+                const subtotal = existingcart.items.reduce((total, item) => total + (item.quantity * item.product.price), 0);
+
                 existingcart.total=existingcart.items.reduce((total,item)=>total+(item.quantity || 0),0);
             }
             console.log(existingcart,"existingcart");

@@ -24,7 +24,7 @@ router.get('/',authentication.isLogout, usercontroller.home);
 router.get('/login',authentication.isLogout, usercontroller.loadlogin);
 router.post('/login',usercontroller.verifylogin);
 router.get('/home',authentication.isLogin,usercontroller.home);
-router.get('/singleProduct/:id',authentication.isLogin,usercontroller.loadSingleShop );
+router.get('/singleProduct/:id',usercontroller.loadSingleShop );
 
 router.get('/userlogout',authentication.isLogin,usercontroller.userlogout)
 

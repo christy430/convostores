@@ -38,11 +38,11 @@ const loadaddaddress= async(req,res)=>{
 const addaddress= async(req,res)=>{
     try{
         const userid= req.session.user_id;
-        const{housename,street,city,state,pincode}=req.body;
+        const{houseName,street,city,state,pincode}=req.body;
         console.log(userid,"from add address");
         const newAddress= new address({
             user:userid,
-            housename,
+            houseName,
             street,
             city,
             state,
@@ -75,12 +75,12 @@ const editaddress= async(req,res)=>{
     try{
         const id=req.body.address_id;
 
-        const{housename,street,city,state,pincode}=req.body;
+        const{houseName,street,city,state,pincode}=req.body;
         const updateData = await address.findByIdAndUpdate(
             {_id:id},
             {
                 $set:{
-                    housename,
+                    houseName,
                     street,
                     city,
                     state,

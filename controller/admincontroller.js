@@ -72,30 +72,9 @@ const listuser = async (req, res) => {
     try {
       const id = req.query.id;
       const uservalue = await user.findById(id);
-      console.log('list', uservalue);
-  
-      if (uservalue.is_blocked) {
-        await user.updateOne(
-          { _id: id }, // Assuming your user schema uses "_id" for the ObjectId
-          {
-            $set: {
-              is_blocked: 0
-            },
-          }
-        );
-  
-        if (req.session.user_id) delete req.session.user_id;
-        
-      } else {
-        await user.updateOne(
-          { _id: id }, // Assuming your user schema uses "_id" for the ObjectId
-          {
-            $set: {
-              is_blocked: 1
-            },
-          }
-        );
-      }
+      uservalue.is_blocked=!uservalue.is_blocked
+      await uservalue.save();
+
       res.status(200).json({ success: true });
     } catch (error) {
       console.log(error);
