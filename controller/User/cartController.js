@@ -1,8 +1,8 @@
-const product= require("../model/productmodel");
-const User= require("../model/usermodel");
-const address = require("../model/addressmodel");
-const cart=require("../model/cartmodel");
-const{ calculateProductTotal,calculatesubtotal}=require("../config/cartsum");
+const product= require("../../model/productmodel");
+const User= require("../../model/usermodel");
+const address = require("../../model/addressmodel");
+const cart=require("../../model/cartmodel");
+const{ calculateProductTotal,calculatesubtotal}=require("../../config/cartsum");
 
 
 const loadcart= async(req,res)=>{

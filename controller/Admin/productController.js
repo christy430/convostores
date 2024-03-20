@@ -1,6 +1,6 @@
-const product= require("../model/productmodel");
-const category = require('../model/categorymodel');
-const user= require("../model/usermodel");
+const product= require("../../model/productmodel");
+const category = require('../../model/categorymodel');
+const user= require("../../model/usermodel");
 const path=require("path");
 const sharp = require("sharp");
 

@@ -1,5 +1,5 @@
-const User = require('../model/usermodel');
-const address = require('../model/addressmodel');
+const User = require('../../model/usermodel');
+const address = require('../../model/addressmodel');
 
 const loadaddress=async(req,res)=>{
     try{

@@ -1,9 +1,9 @@
-const Product= require("../model/productmodel");
-const Category = require('../model/categorymodel');
-const User= require("../model/usermodel");
-const Address = require("../model/addressmodel");
-const Cart=require("../model/cartmodel");
-const Order=require("../model/ordermodel")
+const Product= require("../../model/productmodel");
+const Category = require('../../model/categorymodel');
+const User= require("../../model/usermodel");
+const Address = require("../../model/addressmodel");
+const Cart=require("../../model/cartmodel");
+const Order=require("../../model/ordermodel")
 
 const loadorders= async(req,res)=>{
     try{

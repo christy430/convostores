@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var usercontroller= require('../controller/usercontroller')
+const userController = require('../controller/User/usercontroller');
 const authentication=require('../middlewares/userauthentication')
-const addresscontroller=require('../controller/addresscontroller');
-const checkoutcontroller=require('../controller/checkoutcontroller');
-const cartcontroller= require('../controller/cartcontroller')
+const addressController = require('../controller/User/AddressController');
+const checkoutcontroller=require('../controller/User/checkoutController');
+const cartcontroller= require('../controller/User/cartController')
+const categoryController= require('../controller/User/categoryController');
 const multer=require('../middlewares/multer');
 
 // const passport=require('passport');
@@ -20,52 +21,52 @@ const multer=require('../middlewares/multer');
 
 
 //login
-router.get('/',authentication.isLogout, usercontroller.home);
-router.get('/login',authentication.isLogout, usercontroller.loadlogin);
-router.post('/login',usercontroller.verifylogin);
-router.get('/home',authentication.isLogin,usercontroller.home);
-router.get('/singleProduct/:id',usercontroller.loadSingleShop );
+router.get('/',authentication.isLogout, userController.home);
+router.get('/login',authentication.isLogout, userController.loadlogin);
+router.post('/login',userController.verifylogin);
+router.get('/home',authentication.isLogin,userController.home);
+router.get('/singleProduct/:id',userController.loadSingleShop );
 
-router.get('/userlogout',authentication.isLogin,usercontroller.userlogout)
+router.get('/userlogout',authentication.isLogin,userController.userlogout)
 
 //signup
-router.get('/signup',usercontroller.signup);
-router.post('/signup',usercontroller.postsignup);
+router.get('/signup',userController.signup);
+router.post('/signup',userController.postsignup);
 
 
 
 //account
-router.get('/account',usercontroller.accounthome);
-router.post('/account',multer.uploadUser.single('image'),usercontroller.useredit);
-router.post('/updateprofilepic',multer.uploadUser.single('croppedImage'),usercontroller.updateprofilepicture);
+router.get('/account',userController.accounthome);
+router.post('/account',multer.uploadUser.single('image'),userController.useredit);
+router.post('/updateprofilepic',multer.uploadUser.single('croppedImage'),userController.updateprofilepicture);
 
 
 //google sign-up
-// router.post('/signup/google',usercontroller.googleSignIn);
+// router.post('/signup/google',userController.googleSignIn);
 
 
 //user
 
 
 //otp
-router.get('/otp',usercontroller.loadotp);
-router.get('/verify',usercontroller.loadotp);
-router.post('/verify',usercontroller.verifyOtp);
-router.get('/resendotp',usercontroller.resendotp)
+router.get('/otp',userController.loadotp);
+router.get('/verify',userController.loadotp);
+router.post('/verify',userController.verifyOtp);
+router.get('/resendotp',userController.resendotp)
 
 //forgot password
-router.get('/forgotpassword',usercontroller.loadforgotpassword);
-router.post('/forgotpassword',usercontroller.forgotpassword);
-router.get('/resetpassword',usercontroller.loadresetpassword);
-router.post('/resetpassword',usercontroller.resetPassword);
+router.get('/forgotpassword',userController.loadforgotpassword);
+router.post('/forgotpassword',userController.forgotpassword);
+router.get('/resetpassword',userController.loadresetpassword);
+router.post('/resetpassword',userController.resetPassword);
 
 //adress
-router.get('/useraddress',addresscontroller.loadaddress)
-router.get('/addaddress',addresscontroller.loadaddaddress);
-router.post('/addaddress',addresscontroller.addaddress);
-router.get('/editaddress',addresscontroller.loadeditaddress);
-router.post('/editaddress',addresscontroller.editaddress);
-router.get('/deleteaddress',addresscontroller.deleteaddress);
+router.get('/useraddress',addressController.loadaddress)
+router.get('/addaddress',addressController.loadaddaddress);
+router.post('/addaddress',addressController.addaddress);
+router.get('/editaddress',addressController.loadeditaddress);
+router.post('/editaddress',addressController.editaddress);
+router.get('/deleteaddress',addressController.deleteaddress);
 
 //order
 router.get('/checkout',authentication.isLogin,checkoutcontroller.loadcheckout);
@@ -80,5 +81,11 @@ router.post('/cart',authentication.isLogin,cartcontroller.addtocart);
 router.put('/updatecart',authentication.isLogin,cartcontroller.updatecart)
 router.delete('/removefromcart',authentication.isLogin,cartcontroller.removefromcart);
 
+
+//category-wise-products
+router.get('/allcategory',categoryController.loadAllCategory);
+router.get('/menscategory',categoryController.loadMensCategory);
+router.get('/womenscategory',categoryController.loadWomensCategory);
+router.get('/kidscategory',categoryController.loadkidsCategory);
 
 module.exports = router;

@@ -1,10 +1,10 @@
-const product= require("../model/productmodel");
-const category = require('../model/categorymodel');
-const User= require("../model/usermodel");
-const Cart=require('../model/cartmodel');
-const address = require("../model/addressmodel");
-const Order=require("../model/ordermodel");
-const{ calculateProductTotal,calculatesubtotal}=require("../config/cartsum");
+const product= require("../../model/productmodel");
+const category = require('../../model/categorymodel');
+const User= require("../../model/usermodel");
+const Cart=require('../../model/cartmodel');
+const address = require("../../model/addressmodel");
+const Order=require("../../model/ordermodel");
+const{ calculateProductTotal,calculatesubtotal}=require("../../config/cartsum");
 
 const loadcheckout= async(req,res)=>{
     try {

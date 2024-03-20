@@ -1,4 +1,4 @@
-const user=require('../model/usermodel')
+const user=require('../../model/usermodel')
 const bcrypt=require("bcrypt");
 
 const adminhome=async(req,res)=>{
@@ -68,7 +68,7 @@ const usermanage= async(req,res)=>{
       }
 }
 
-const listuser = async (req, res) => {
+const BlockAndUnblockuser = async (req, res) => {
     try {
       const id = req.query.id;
       const uservalue = await user.findById(id);
@@ -87,5 +87,5 @@ module.exports={
     verifylogin,
     adminlogout,
     usermanage,
-    listuser
+    BlockAndUnblockuser
 }

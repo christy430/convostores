@@ -2,10 +2,11 @@ const express = require('express');
 const admin_route=express.Router();
 const session=require("express-session");
 const adminauthentication=require("../middlewares/adminauthentication");
-const admincontroller=require('../controller/admincontroller');
-const categorycontroller= require('../controller/categorycontroller')
-const productcontroller=require('../controller/productcontroller');
-const ordercontroller=require('../controller/ordercontroller');
+const adminController = require('../controller/Admin/admincontroller');
+const categorycontroller= require('../controller/Admin/categoryController')
+const productcontroller=require('../controller/Admin/productController');
+const ordercontroller=require('../controller/Admin/orderController');
+const coupenController= require('../controller/Admin/coupenController');
 const multer=require('../middlewares/multer');
 
 
@@ -14,14 +15,14 @@ const multer=require('../middlewares/multer');
 
 
 /* GET home page. */
-admin_route.get('/',adminauthentication.islogout,admincontroller.adminlogin);
-admin_route.post('/',admincontroller.verifylogin)
+admin_route.get('/',adminauthentication.islogout,adminController.adminlogin);
+admin_route.post('/',adminController.verifylogin)
 admin_route.use(adminauthentication.isLogin)
-admin_route.get('/home',admincontroller.adminhome);
-admin_route.get('/usermanage',admincontroller.usermanage);
-admin_route.get('/unlistUser',admincontroller.listuser);
+admin_route.get('/home',adminController.adminhome);
+admin_route.get('/usermanage',adminController.usermanage);
+admin_route.get('/unlistUser',adminController.BlockAndUnblockuser);
 
-admin_route.get('/logout',admincontroller.adminlogout)
+admin_route.get('/logout',adminController.adminlogout)
 
 
 //category routes
@@ -44,5 +45,14 @@ admin_route.post('/editproduct',multer.uploadProduct.array("image"),productcontr
 admin_route.get('/order',ordercontroller.loadorders);
 admin_route.get('/orderdetails',ordercontroller.listOrderDetails);
 admin_route.put('/orderstatuschange',ordercontroller.orderStatusChange);
+
+//coupon routes
+admin_route.get('/addCoupon',coupenController.loadAddCoupon)
+admin_route.post('/addCoupon',coupenController.addCoupon);
+admin_route.get('/viewCoupon',coupenController.loadViewCoupon);
+admin_route.get('/editCoupon',coupenController.loadEditCoupon);
+admin_route.put('/editCoupon',coupenController.editCoupon);
+admin_route.get('/coupondetails',coupenController.couponDetails);
+admin_route.get('/unlistCoupon',coupenController.unlistCoupon);
 
 module.exports = admin_route;

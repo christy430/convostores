@@ -1,8 +1,8 @@
-const User = require('../model/usermodel');
-const product= require('../model/productmodel');
-const category= require('../model/categorymodel');
+const User = require('../../model/usermodel');
+const product= require('../../model/productmodel');
+const category= require('../../model/categorymodel');
 const bcrypt=require('bcrypt');
-const message=require('../config/otp')
+const message=require('../../config/otp')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("941543183511-fr0s2li519qfsgmos5rr12nd5ue511et.apps.googleusercontent.com")
 
@@ -42,10 +42,8 @@ const loadSingleShop = async (req, res) => {
     const productId = req.params.id;
     const productdata = await product.findById(productId);
     const categories = await category.find();
-console.log(productdata,categories,'end');
-    // if (!userData) {
-    //   return res.status(404).send("User not found");
-    // }
+    // console.log(productdata,categories,'end');
+    
 
 
     if (!productdata) {
