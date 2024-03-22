@@ -248,6 +248,7 @@
     </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -277,7 +278,7 @@
         const requestData = {
             address: address,
             payMethod: selectedPaymentMethod,
-            // couponCode: couponCode
+            couponCode: couponCode
         };
 
             const response = await fetch('/checkout', {

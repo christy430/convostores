@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const userController = require('../controller/User/usercontroller');
-const authentication=require('../middlewares/userauthentication')
+const authentication=require('../middlewares/userauthentication');
 const addressController = require('../controller/User/AddressController');
 const checkoutcontroller=require('../controller/User/checkoutController');
-const cartcontroller= require('../controller/User/cartController')
+const cartcontroller= require('../controller/User/cartController');
+const coupencontroller = require('../controller/Admin/coupenController');
 const categoryController= require('../controller/User/categoryController');
+const wishlistController= require('../controller/User/wishlistController');
 const multer=require('../middlewares/multer');
 
 // const passport=require('passport');
@@ -70,10 +72,12 @@ router.get('/deleteaddress',addressController.deleteaddress);
 
 //order
 router.get('/checkout',authentication.isLogin,checkoutcontroller.loadcheckout);
-router.post('/checkout',authentication.isLogin,checkoutcontroller.postcheckout)
+router.post('/checkout',authentication.isLogin,checkoutcontroller.postcheckout);
+router.post('/razorpay',authentication.isLogin,checkoutcontroller.razorPayOrder);
 router.get('/ordersuccess',authentication.isLogin,checkoutcontroller.laoadOrderdetails)
 router.get('/orderdetails/:id',authentication.isLogin,checkoutcontroller.orderdetails);
 router.post('/cancelorder',authentication.isLogin,checkoutcontroller.cancelorder);
+router.post('/return',authentication.isLogin,checkoutcontroller.returnOrder);
 
 //cart
 router.get('/cart',authentication.isLogin,cartcontroller.loadcart);
@@ -87,5 +91,14 @@ router.get('/allcategory',categoryController.loadAllCategory);
 router.get('/menscategory',categoryController.loadMensCategory);
 router.get('/womenscategory',categoryController.loadWomensCategory);
 router.get('/kidscategory',categoryController.loadkidsCategory);
+
+//wallet routes
+router.get('/wallets',authentication.isLogin,userController.loadWallets);
+
+//coupon routes
+router.get('/coupons',authentication.isLogin,coupencontroller.listUserCoupons)
+
+//wishlist routes
+router.get('/wishlist',wishlistController.loadWishlist);
 
 module.exports = router;

@@ -1,6 +1,4 @@
-﻿
-
-<%-include('../layout/userheader') %>
+﻿<%-include('../layout/userheader') %>
     <main class="main">
         <section class="home-slider position-relative mb-30">
             <div class="container">
@@ -51,42 +49,8 @@
                 </div>
             </div>
         </section>
-        <!-- <section class="banners mb-20">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="banner-img wow fadeIn animated">
-                            <img src="assets/imgs/banner/banner-1.png" alt="">
-                            <div class="banner-text">
-                                <span>Smart Offer</span>
-                                <h4>Save 20% on <br>Woman Bag</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="banner-img wow fadeIn animated">
-                            <img src="assets/imgs/banner/banner-2.png" alt="">
-                            <div class="banner-text">
-                                <span>Sale off</span>
-                                <h4>Great Summer <br>Collection</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 d-md-none d-lg-flex">
-                        <div class="banner-img wow fadeIn animated  mb-sm-0">
-                            <img src="assets/imgs/banner/banner-3.png" alt="">
-                            <div class="banner-text">
-                                <span>New Arrivals</span>
-                                <h4>Shop Today’s <br>Deals & Offers</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
+
+
         <section class="product-tabs section-padding position-relative wow fadeIn animated">
             <!-- div class="bg-square<"></div> -->
             <div class="container">
@@ -107,91 +71,63 @@
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                         <div class="row product-grid-4" id="productGrid">
-                     
-
-                            
-
-            <% for (let product of products) { 
-      
-              const categoryId =
-            product.category; categories.forEach(category => { if
-            (categoryId.toString() === category._id.toString()) { if
-            (category.is_listed) { %>
-
-            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-              <div class="product-cart-wrap mb-30">
-                <div class="product-img-action-wrap">
-                  <div class="product-img product-img-zoom">
-                    <a href="/singleProduct/<%= product._id%>">
-                      <img
-                        class="default-img"
-                        src="/assets/imgs/productIMG/<%= product.image[0]%>"
-                        alt=""
-                      />
-                      <img
-                        class="hover-img"
-                        src="/assets/imgs/productIMG/<%= product.image[1]%>"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-
-                  <div
-                    class="product-badges product-badges-position product-badges-mrg"
-                  >
-                    
-                  </div>
-                </div>
-                <div class="product-content-wrap">
-                  <div class="product-category">
-                    <a href="shop-grid-right.html">Music</a>
-                  </div>
-                  <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
-                  <div class="rating-result" title="90%">
-                    <span>
-                        <span>
-                      <%if(product.discountStatus==true && new Date() <= new Date(product.discountEnd)  ){%>
-                                                    <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
-                                                    <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
-                                                <%}%>
-                   
-                    </span>
-                    </span>
-                  </div>
-                  <div class="product-price">
-        <% if (product.discountStatus && new Date() <= new Date(product.discountEnd) ) { %>
-          <span>₹<%= product.discountPrice %> </span>
-          <span class="old-price">- ₹<s><%= product.price %></s></span>
-        <% } else { %>
-          <span> ₹<%= product.price %></span>
-        <% } %>
-      </div>
-                                
-    <div class="product-action-1 show">
-
-   
-    </div>
-
-
-
-                </div>
-              </div>
-            </div>
-
-            <% } } }); } %>
-
-      
-
-
-     
-                         
+                            <% for (let product of products) { 
+                                const categoryId = product.category; 
+                                categories.forEach(category => { 
+                                    if (categoryId.toString() === category._id.toString()) { 
+                                        if (category.is_listed) { %>
+        
+                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                                <div class="product-cart-wrap mb-30">
+                                                    <div class="product-img-action-wrap">
+                                                        <div class="product-img product-img-zoom">
+                                                            <a href="/singleProduct/<%= product._id%>">
+                                                                <img class="default-img" src="/assets/imgs/productIMG/<%= product.image[0]%>" alt="" />
+                                                                <img class="hover-img" src="/assets/imgs/productIMG/<%= product.image[1]%>" alt="" />
+                                                            </a>
+                                                        </div>
+        
+                                                        <div class="product-badges product-badges-position product-badges-mrg">
+        
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-content-wrap">
+                                                        <div class="product-category">
+                                                            <a href="shop-grid-right.html">Music</a>
+                                                        </div>
+                                                        <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
+                                                        <div class="rating-result" title="90%">
+                                                            <span>
+                                                                <span>
+                                                                    <% if(product.discountStatus==true && new Date() <= new Date(product.discountEnd) ){ %>
+                                                                        <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
+                                                                        <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
+                                                                    <% } %>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="product-price">
+                                                            <% if (product.discountStatus && new Date() <= new Date(product.discountEnd) ) { %>
+                                                                <span>₹<%= product.discountPrice %> </span>
+                                                                <span class="old-price">- ₹<s><%= product.price %></s></span>
+                                                            <% } else { %>
+                                                                <span> ₹<%= product.price %></span>
+                                                            <% } %>
+                                                        </div>
+                                                        <div class="product-action-1 show">
+        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        <% } 
+                                    } 
+                                }); 
+                            } %>
                         </div>
                         <!--End product-grid-4-->
                     </div>
-                    
-
-
-
                     <!--En tab two (Popular)-->
                     <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
                         <div class="row product-grid-4">
@@ -209,7 +145,6 @@
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                             <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                         </div>
-                                        
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
@@ -231,7 +166,6 @@
                                     </div>
                                 </div>
                             </div>
-                           
                         </div>
                         <!--End product-grid-4-->
                     </div>
@@ -239,6 +173,7 @@
                 </div>
                 <!--End tab-content-->
             </div>
-        </section>       
+        </section>
+               
     </main>
     <%-include('../layout/userfooter') %>

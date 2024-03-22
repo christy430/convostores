@@ -2,7 +2,8 @@ const User = require('../../model/usermodel');
 const product= require('../../model/productmodel');
 const category= require('../../model/categorymodel');
 const bcrypt=require('bcrypt');
-const message=require('../../config/otp')
+const message=require('../../config/otp');
+const Wallet= require('../../model/walletmodel');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("941543183511-fr0s2li519qfsgmos5rr12nd5ue511et.apps.googleusercontent.com")
 
@@ -335,19 +336,18 @@ const forgotpassword=async(req,res)=>{
     const existingUser= await User.findOne({email:emaildata});
     req.session.userdata=existingUser;
     req.session.user_id=existingUser._id;
+
+
     if(existingUser){
       console.log(existingUser.email,"jjjc");
       const data= await message.sendverifyemail(existingUser.email,req);
       return res.redirect('/otp');
-    }else{
-      res.render('user/forgotpassword',{
-        error:"Attempt failed",
-        User:null,
-      });
     }
-
-  }catch(error){
-    console.log(error);
+      
+}catch(error){
+      console.log("user not found");
+      res.render('user/forgotpassword',{message:"Invalid E-mail, Please check and try again",User:null});
+      console.log(error);
   }
 };
 
@@ -449,6 +449,35 @@ const updateprofilepicture=async(req,res)=>{
   }
 }
 
+const loadWallets= async(req,res)=>{
+  try{
+    const userId= req.session.user_id;
+    const userData= await User.findById(userId);
+
+    if(!userData){
+      return res.render("login",{userData:null});
+    }
+
+    const page= parseInt(req.query.page) || 1;
+    const perPage=7;
+    const offset=(page-1)*perPage;
+
+    const  walletData= await Wallet.findOne({user:userId}).sort({data:-1})
+    .populate({
+      path:'transaction',
+      options:{skip:offset,limit:perPage},
+    });
+
+    if(!walletData){
+      return  res.render('user/wallet',{user:userData,wallet:null,currentpage:0});
+    }
+
+    res.render('user/wallet',{user:userData,wallet:walletData,currentPage:page});
+  }catch(error){
+    console.log(error);
+    res.status(500).send("INternal Server Error");
+  }
+}
 
 
 
@@ -470,6 +499,7 @@ module.exports={
   updateprofilepicture,
   forgotpassword,
   loadresetpassword,
-  resetPassword
+  resetPassword,
+  loadWallets
   
 };

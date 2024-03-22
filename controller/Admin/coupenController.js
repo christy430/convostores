@@ -169,6 +169,24 @@ const couponDetails= async(req,res)=>{
     }
 }
 
+const listUserCoupons=async(req,res)=>{
+    try{
+        const currentDate= new Date();
+        const userId=req.session.user_id;
+
+        const userData= await User.findById(userId);
+        if(userData){
+            const coupon= await Coupon.find({
+                expiry:{$gt:currentDate},
+                is_listed:true,
+            }).sort({createdDate:-1});
+            res.render('user/coupons',{coupon,user:userId,userData});
+        }
+    }catch(error){
+        console.log(error);
+    }
+}
+
 module.exports={
     loadAddCoupon,
     addCoupon,
@@ -176,5 +194,6 @@ module.exports={
     loadEditCoupon,
     editCoupon,
     unlistCoupon,
-    couponDetails
+    couponDetails,
+    listUserCoupons
 }
