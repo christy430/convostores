@@ -192,112 +192,106 @@
     });
   </script>
   <script>
-
-    // Image preview
-    document.getElementById('fileUpload').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById('previewImage').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-
     document.addEventListener('DOMContentLoaded', function () {
-      const user_name = document.getElementById("user_name");
-      const errorName = document.getElementById("errorName");
-      const user_phone = document.getElementById("user_phone");
-      const errorMobile = document.getElementById("errorMobile");
-      const fileUpload = document.getElementById("fileUpload");
-      const errorfileUpload = document.getElementById("errorfileUpload");
-      const password = document.getElementById("password");
-      const errorpassword = document.getElementById("errorpassword");
-      const cpassword = document.getElementById("cpassword");
-      const errorcpassword = document.getElementById("errorcpassword");
+        // Function to handle image preview when a file is selected
+        document.getElementById('fileUpload').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
+        // Function to perform input validation on form submission
+        document.getElementById('userForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission for now
 
-      user_name.addEventListener('input', function () {
-        errorName.innerHTML = user_name.value.trim() === "" ? "Please enter user name" : /^[a-zA-Z ]+$/.test(user_name.value) == false ? "Please enter alphabets only" : "";
-      });
+            // Get form input elements and error message elements
+            const user_name = document.getElementById("user_name");
+            const errorName = document.getElementById("errorName");
+            const user_phone = document.getElementById("user_phone");
+            const errorMobile = document.getElementById("errorMobile");
+            const fileUpload = document.getElementById("fileUpload");
+            const errorfileUpload = document.getElementById("errorfileUpload");
 
-      user_phone.addEventListener('input', function () {
-        errorMobile.innerHTML = user_phone.value.trim() === "" ? "Please enter user phone number" : /^\d{10}$/.test(user_phone.value) == false ? "Please enter valid phone number" : "";
-      });
+            // Validate user name
+            errorName.innerHTML = user_name.value.trim() === "" ? "Please enter user name" : /^[a-zA-Z ]+$/.test(user_name.value) === false ? "Please enter alphabets only" : "";
 
-      password.addEventListener('input', function () {
-        errorpassword.innerHTML = password.value.trim() === "" ? "Please enter password" : password.value.length < 8 ? "Please enter a minimum of 8 characters" : "";
-      });
-      cpassword.addEventListener('input', function () {
-        errorcpassword.innerHTML = cpassword.value.trim() === "" ? "Please enter password" : (cpassword.value !== password.value) ? "Passwords do not match" : "";
-      });
+            // Validate user phone number
+            errorMobile.innerHTML = user_phone.value.trim() === "" ? "Please enter user phone number" : /^\d{10}$/.test(user_phone.value) === false ? "Please enter valid phone number" : "";
 
+            // Validate uploaded file
+            const uploadedFile = fileUpload.files[0];
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp"];
+            errorfileUpload.innerHTML = uploadedFile && !allowedTypes.includes(uploadedFile.type) ? "Please upload a valid image file (JPEG, PNG, GIF)" : "";
 
+            // If all validations pass, submit the form
+            if (!errorName.innerHTML && !errorMobile.innerHTML && !errorfileUpload.innerHTML) {
+                event.target.submit();
+            }
+        });
     });
-    function validationChecking(event) {
-      const user_name = document.getElementById("user_name");
-      const errorName = document.getElementById("errorName");
-      const user_phone = document.getElementById("user_phone");
-      const errorMobile = document.getElementById("errorMobile");
-      const fileUpload = document.getElementById("fileUpload");
-      const errorfileUpload = document.getElementById("errorfileUpload");
+</script>
 
-      errorName.innerHTML =
-        user_name.value.trim() === ""
-          ? "Please enter user name"
-          : /^[a-zA-Z ]+$/.test(user_name.value) == false
-            ? "Please enter alphabets only"
-            : "";
-      errorMobile.innerHTML =
-        user_phone.value.trim() === ""
-          ? "Please enter user phone number"
-          : /^\d{10}$/.test(user_phone.value) == false
-            ? "Please enter valid phone number"
-            : "";
+  <script>
+    // Initialize Cropper for each image
+    const croppers = [];
+    const inputFields = document.querySelectorAll('.form-data');
 
-      const uploadedFile = fileUpload.files[0];
-      const existingImage = document.getElementById("previewImage");
-      const defaultImageSrc = existingImage.getAttribute("src");
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/bmp",
-        "image/webp",
+    inputFields.forEach((input, index) => {
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            const reader = new FileReader();
 
-      ];
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
 
-      if (uploadedFile) {
-        if (!allowedTypes.includes(uploadedFile.type)) {
-          errorfileUpload.innerHTML = "Please upload a valid image file (JPEG, PNG, GIF)";
+                const imageWrapper = document.createElement('div');
+                imageWrapper.classList.add('image-cropper');
+                imageWrapper.style.width = '300px';
+                imageWrapper.style.display = 'block';
 
-          return false;
-        }
-      } else {
-        // If no new file is selected, maintain the existing image
-        existingImage.setAttribute("src", defaultImageSrc);
-      }
+                const previewDiv = document.createElement('div');
+                previewDiv.classList.add('preview-image');
+                previewDiv.style.overflow = 'hidden';
+                previewDiv.style.width = '300px';
+                previewDiv.style.height = '200px';
+                previewDiv.appendChild(img);
+                imageWrapper.appendChild(previewDiv);
 
-      if (errorName.innerHTML || errorMobile.innerHTML) return false;
+                const saveButton = document.createElement('button');
+                saveButton.innerText = 'Save';
+                saveButton.classList.add('btn', 'btn-primary');
+                saveButton.style.marginTop = '10px';
+                saveButton.addEventListener('click', function () {
+                    const canvas = croppers[index].getCroppedCanvas();
+                    if (canvas) {
+                        const croppedImg = canvas.toDataURL(); // Get the cropped image as base64 string
+                        const imgView = document.getElementById(`imgView${index + 1}`);
+                        imgView.src = croppedImg; // Update the image src with cropped image
+                    }
+                });
+                imageWrapper.appendChild(saveButton);
 
-      return true;
-    }
+                document.getElementById(`imgView${index + 1}`).style.display = 'none';
+                document.getElementById(`saveButton${index + 1}`).style.display = 'block';
+                document.getElementById(`croppedImg${index + 1}`).appendChild(imageWrapper);
 
-    function validationPasswordChecking(event) {
-      const password = document.getElementById("password");
-      const errorpassword = document.getElementById("errorpassword");
-      const cpassword = document.getElementById("cpassword");
-      const errorcpassword = document.getElementById("errorcpassword");
-      errorpassword.innerHTML = password.value.trim() === "" ? "Please enter password" : password.value.length < 8 ? "Please enter a minimum of 8 characters" : "";
-      errorcpassword.innerHTML = cpassword.value.trim() === "" ? "Please enter password" : (cpassword.value !== password.value) ? "Passwords do not match" : "";
+                croppers[index] = new Cropper(img, {
+                    aspectRatio: 1, // You can set your desired aspect ratio here
+                    viewMode: 1,
+                });
+            };
 
-      if (errorpassword.innerHTML || errorcpassword.innerHTML) return false;
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
 
-      return true;
-    }
-  </script>
 
 
 

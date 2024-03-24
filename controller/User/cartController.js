@@ -44,7 +44,7 @@ const loadcart= async(req,res)=>{
                       }
                     }
                 }
-                console.log( subtotalwithshipping,"const subtotalwithshipping")
+                // console.log( subtotalwithshipping,"const subtotalwithshipping")
                 res.render('./user/cart',{ user:userdata,productTotal,subtotalwithshipping,outofstockerror,maxquantityerror,cart});  
             }else{
                 res.render('./user/cart',{userdata,cart:null,subtotalwithshipping:0});

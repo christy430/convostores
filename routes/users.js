@@ -96,7 +96,9 @@ router.get('/kidscategory',categoryController.loadkidsCategory);
 router.get('/wallets',authentication.isLogin,userController.loadWallets);
 
 //coupon routes
-router.get('/coupons',authentication.isLogin,coupencontroller.listUserCoupons)
+router.get('/coupons',authentication.isLogin,coupencontroller.listUserCoupons);
+router.post('/applyCoupn',authentication.isLogin,checkoutcontroller.apllyCoupon);
+
 
 //wishlist routes
 router.get('/wishlist',wishlistController.loadWishlist);

@@ -5,7 +5,7 @@ const adminauthentication=require("../middlewares/adminauthentication");
 const adminController = require('../controller/Admin/admincontroller');
 const categorycontroller= require('../controller/Admin/categoryController')
 const productcontroller=require('../controller/Admin/productController');
-const ordercontroller=require('../controller/Admin/orderController');
+const ordercontroller = require('../controller/Admin/ordercontroller');
 const coupenController= require('../controller/Admin/coupenController');
 const multer=require('../middlewares/multer');
 
@@ -54,5 +54,8 @@ admin_route.get('/editCoupon',coupenController.loadEditCoupon);
 admin_route.put('/editCoupon',coupenController.editCoupon);
 admin_route.get('/coupondetails',coupenController.couponDetails);
 admin_route.get('/unlistCoupon',coupenController.unlistCoupon);
+
+//sales Report
+admin_route.get('/salesreport',ordercontroller.loadSalesReport);
 
 module.exports = admin_route;

@@ -10,9 +10,9 @@ const razorPay= require('razorpay');
 require('dotenv').config()
 const{ calculateProductTotal,calculatesubtotal, calculateDisountedTotal}=require("../../config/cartsum");
 
-var instace= new razorPay({
-    key_id:process.env.razorPay.key_id,
-    key_secret:process.env.razorPay.key_secret,
+var instance= new razorPay({
+    key_id:"rzp_test_JzsmYTfT9IMez0",
+    key_secret:"hz6IZ2kNINTlW3pwEjqin9c5",
 });
 
 
@@ -61,8 +61,14 @@ const loadcheckout= async(req,res)=>{
                     }
                 }
             }
+            const currentDate=new Date();
+
+            const coupon = await Coupon.find({
+                expiry: { $gt: currentDate },
+                is_listed: true,
+              }).sort({ createdDate: -1 });
     
-            res.render('./user/checkout', { user:userId,userData,addressData, productTotal, subtotalwithshipping, outofstockerror, maxquantityerror, cartData:usercart,cart:cart });
+            res.render('./user/checkout', { user:userId,userData,addressData, productTotal,subtotalWithShipping: subtotalwithshipping, outofstockerror, maxquantityerror, cartData:usercart,cart:cart,coupon });
         }
     } catch (error) {
         console.log(error);
@@ -80,7 +86,7 @@ const postcheckout = async (req, res) => {
                 model: "product",
             })
             .populate("user");
-console.log(cart,"hjjhgjhghjghjgjbmnjk");
+        console.log(cart,"hjjhgjhghjghjgjbmnjk");
         if (!userData || !cart) {
             console.log("hello from !userData || !cart")
             return res.status(500).json({ success: false, error: "User or cart not found" });
@@ -298,7 +304,7 @@ const returnOrder= async(req,res)=>{
         
         const orderId= req.query.id;
         const {reason,productId}=req.body;
-        
+
         const order= await Order.findOne({_id:orderId})
         .populate("user")
         .populate({
@@ -409,9 +415,9 @@ const  apllyCoupon= async(req,res)=>{
         if(coupon.maxAmount<discountedTotal){
             errorMessage="The Discont cannot be applied. It is beyond maximum amount";
             return res.json({errorMessage});
-
-            res.status(200).json({success:true,discountedTotal,message:"return sucessfully"});
         }
+            res.status(200).json({success:true,discountedTotal,message:"return sucessfully"});
+        
 
     }catch(error){
         res.status(500).json({errorMessage:"Internal Server error"})
@@ -451,6 +457,7 @@ async function couponAplly(couponCode,discountedTotal,userId){
 const razorPayOrder= async(req,res)=>{
     try{
         const userId= req.session.user_id;
+        console.log(req.body,"gkjgkjfgkjfgkjfk",userId);
         const{address,paymentMethod,couponCode}=req.body;
         const user= await User.findById(userId);
 
@@ -471,31 +478,37 @@ const razorPayOrder= async(req,res)=>{
             return res.status(400).json({error:"Billing address not selected"});
         }
 
-        const cartItems=cart.items||[];
-        let totalAmount=0;
-        totalAmount=cartItems.reduce((acc,item)=>acc+(item.product.discountPrice?item.product.discountPrice* item.quantity:item.product.price * item.quantity || 0),0);
+        // const cartItems=cart.items||[];
+        // let totalAmount=0;
+        // totalAmount=cartItems.reduce((acc,item)=>acc+(item.product.price?item.product.price* item.quantity:item.product.price * item.quantity || 0),0);
 
-        totalAmount = cartItems.reduce((acc, item) => {
-            if (item.product.discountPrice && item.product.discountStatus &&
-              new Date(item.product.discountStart) <= new Date() &&
-              new Date(item.product.discountEnd) >= new Date()) {
-              return acc + (item.product.discountPrice * item.quantity || 0);
-            } else {
-              return acc + (item.product.price * item.quantity || 0);
-            }
-          }, 0); 
-
+        // totalAmount = cartItems.reduce((acc, item) => {
+        //     if (item.product.price &&
+        //       new Date(item.product.discountStart) <= new Date() &&
+        //       new Date(item.product.discountEnd) >= new Date()) {
+        //       return acc + (item.product.price * item.quantity || 0);
+        //     } else {
+        //       return acc + (item.product.price * item.quantity || 0);
+        //     }
+        //   }, 0); 
+        const cartItems = cart.items || [];
+        let totalAmount = 0;
+         totalAmount = cartItems.reduce(
+          (acc, item) => acc + (item.product.price * item.quantity || 0),
+          0
+        );
+    
           if(couponCode){
             totalAmount= await couponAplly(couponCode,totalAmount,userId);
           }
 
           const options={
-            amount:Math.round(totalAmount*100),
+            amount:Math.round(totalAmount),
             currency:"INR",
-            reciept:`order_${Date.now()}`,
+            receipt:`order_${Date.now()}`,
             payment_capture:1,
           }
-
+          console.log(options,"hjhgjfhf");
           instance.orders.create(options, async (err, razorpayOrder) => {
             if (err) {
               console.error("Error creating Razorpay order:", err);

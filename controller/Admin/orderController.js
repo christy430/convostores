@@ -4,6 +4,7 @@ const User= require("../../model/usermodel");
 const Address = require("../../model/addressmodel");
 const Cart=require("../../model/cartmodel");
 const Order=require("../../model/ordermodel")
+const dateFun= require("../../util/dateData");
 
 const loadorders= async(req,res)=>{
     try{
@@ -112,8 +113,54 @@ const orderStatusChange = async (req, res) => {
     }
   }; 
 
+const loadSalesReport= async(req,res)=>{
+  let query={};
+
+  if(req.query.status){
+    if(req.query.status==="Daily"){
+      query.orderDate=dateFun.getDailyDateRange();
+    }else if(req.query.status==="Weekly"){
+      query.orderDate=dateFun.getWeeklyDateRange();
+    }else if(req.query.status==="Monthly"){
+      query.orderDate=dateFun.getMonthlyDateRange();
+    }else if(req.query.status==="Yearly"){
+      query.orderDate=dateFun.getYearlyDateRange();
+    }else if(req.query.status==="All"){
+      query["items.status"]="Delivered";
+    }
+  }
+  query["items.status"]="Delivered";
+  
+  try{
+    const orders= await Order.find(query).sort({orderDate:-1})
+    .populate("user")
+    .populate({
+      path:"address",
+      model:"Address",
+    })
+    .populate({
+      path:"items.product",
+      model:"product"
+    })
+    .sort({orderDate:-1});
+
+    const totalRevenue= orders.reduce((acc,order)=>acc+order.totalAmount,0);
+    
+    const totalSales= orders.length;
+
+    const totalProductSold= orders.reduce((acc,order)=>acc+order.items.length,0);
+
+    res.render("admin/salesreport",{orders,totalRevenue,totalSales,totalProductsSold :totalProductSold,req});
+
+    }catch(error){
+      console.log(error);
+      res.status(500).send("Error in fetching Orders");
+    }
+}
+
 module.exports={
     loadorders,
     listOrderDetails,
-    orderStatusChange
+    orderStatusChange,
+    loadSalesReport
 }
