@@ -414,7 +414,7 @@
 
                 const data = await response.json();
 
-                console.log('Coupon Application Response:', data);
+                // console.log('Coupon Application Response:', data);
 
                 if (data.errorMessage) {
                     Swal.fire({
@@ -464,7 +464,7 @@
 
             const selectedAddress = document.querySelector('input[name="checkAddress"]:checked');
             let selectedPaymentMethod = document.querySelector('input[name="payment_option"]:checked').value;
-            console.log(selectedPaymentMethod,"djgjsdjh");
+            // console.log(selectedPaymentMethod,"djgjsdjh");
             const couponCode = couponCodeInput.value;
 
             if (!selectedAddress) {
@@ -509,7 +509,7 @@
                                 showConfirmButton: true,
                             }).then(() => {
                                 // Redirect after displaying the success message
-                                window.location.href = '/orderSuccess';
+                                window.location.href = '/ordersuccess';
                             });
                         } else {
                             Swal.fire("Error!", "Failed to perform the action", "error");
@@ -569,7 +569,7 @@
                                         if (orderData.success) {
                                             console.log("Order created successfully");
                                             // Redirect to order confirmation page or any other desired action
-                                            window.location.href = "/orderSuccess";
+                                            window.location.href = "/ordersuccess";
                                         } else {
                                             // Handle error in order creation
                                             console.error("Error in order creation:", orderData.error);
@@ -623,7 +623,7 @@
                                 showConfirmButton: true,
                             }).then(() => {
                                 // Redirect after displaying the success message
-                                window.location.href = '/orderSuccess';
+                                window.location.href = '/ordersuccess';
                             });
                         } else {
                             Swal.fire("Error!", "Insufficient balance", "error");

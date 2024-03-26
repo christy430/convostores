@@ -3,7 +3,7 @@ var router = express.Router();
 const userController = require('../controller/User/usercontroller');
 const authentication=require('../middlewares/userauthentication');
 const addressController = require('../controller/User/AddressController');
-const checkoutcontroller=require('../controller/User/checkoutController');
+const checkoutcontroller = require('../controller/User/checkoutcontroller');
 const cartcontroller= require('../controller/User/cartController');
 const coupencontroller = require('../controller/Admin/coupenController');
 const categoryController= require('../controller/User/categoryController');
@@ -101,6 +101,9 @@ router.post('/applyCoupn',authentication.isLogin,checkoutcontroller.apllyCoupon)
 
 
 //wishlist routes
-router.get('/wishlist',wishlistController.loadWishlist);
+router.get('/wishlist',authentication.isLogin,wishlistController.loadWishlist);
+router.post('/addToWishlist',authentication.isLogin,wishlistController.addToWishlist);
+router.delete('/removewishlist',authentication.isLogin,wishlistController.removeWishlist);
+
 
 module.exports = router;

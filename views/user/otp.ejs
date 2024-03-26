@@ -85,10 +85,13 @@
                                                 <button type="submit" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;</button>
                                                 <span id="otp-expiry-time"></span>
                                                 <br><br>
-                                                
-                                                <a class="text-decoration-none" href="/resendotp" id="resendLink">Resend OTP</a>
+                                                <div class="container mt-2 fw-bold" id="timer">
+                                                    30 
+                                                </div>
+                                                <!-- <a class="text-decoration-none" href="/resendotp" id="resendLink">Resend OTP</a> -->
                                             </div>
                                         </form>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -106,6 +109,22 @@
     setTimeout(()=>{
         document.getElementById('alertbutton').style.display="none"
     },3000)
+</script>
+<script>
+    let i = 30
+    const timerContainer = document.querySelector("#timer")
+
+    const intervelId = setInterval(() => {
+        if(i<=0){
+            clearInterval(intervelId)
+            const resendButton = `<a href="/resendotp">Resend OTP</a>`
+            timerContainer.innerHTML = resendButton;
+        }else{
+            i--;
+            timerContainer.innerHTML = i;
+        }
+    },1000);
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

@@ -86,7 +86,7 @@ const addtocart = async (req, res) => {
                 size,
               });
             }
-            console.log("product to update from cartcontroller")
+            // console.log("product to update from cartcontroller")
 
             existingcart.total = existingcart.items.reduce((total, item) => total + (item.quantity || 0), 0);
               await existingcart.save();

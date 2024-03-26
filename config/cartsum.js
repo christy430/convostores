@@ -34,7 +34,7 @@ function calculateDisountedTotal(total,discountpercentage){
     }
     const discountAmount=(discountpercentage/100)*total;
     const discountedTotal= total-discountAmount;
-
+console.log(discountedTotal,"fdfdfdfdf");
     return discountedTotal;
 }
 

@@ -31,7 +31,17 @@ const product = new mongoose.Schema({
     is_listed:{
         type:Boolean,
         default:true
-    }
+    },
+    discountPrice: {
+    type: Number,
+    },
+    discountStatus:{
+      type:Boolean,
+      default:false
+    },
+    discount:Number,
+    discountStart:Date,
+    discountEnd:Date,   
 });
 
 module.exports=mongoose.model('product',product)

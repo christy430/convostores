@@ -129,13 +129,13 @@ const editproducthome= async(req,res)=>{
         const id= req.query.id;
         let Product = await product.findOne({_id:id});
         let categories = await category.find({});
-        console.log(Product,"juyhuu");
+        // console.log(Product,"juyhuu");
         if(Product){
-            console.log("hello from product if block",product)
+            // console.log("hello from product if block",product)
             res.render('admin/editproduct',{categories,product:Product});
 
         }else{
-            console.log("hello from product else block")
+            // console.log("hello from product else block")
             res.redirect('/admin/product');
         }
     }catch(error){
@@ -145,9 +145,9 @@ const editproducthome= async(req,res)=>{
 
 const editproduct= async (req,res)=>{
     try{
-        console.log("hello from editproduct")
+        // console.log("hello from editproduct")
         const Product = await product.findOne({_id:req.body.product_id});
-        console.log(Product)
+        // console.log(Product)
         let images=[];
         let deletedata=[];
 
@@ -162,18 +162,47 @@ const editproduct= async (req,res)=>{
 
         let categories = await category.find({});
         const sizedata=req.body.sizes;
-        if(req.body.deletecheckbox){
-            deletedata.push(req.body.deletecheckbox);
-            deletedata= deletedata.flat().map((x)=>Number(x));
-            images= Product.image.filter((img,idx)=>!deletedata.includes(idx));
-        }else{
-            images =Product.image.map((img)=>{
-                return img;
-            });
+        // if(req.body.deletecheckbox){
+        //     // deletedata.push(req.body.deletecheckbox);
+        //     // deletedata= deletedata.flat().map((x)=>Number(x));
+        //     // images= Product.image.filter((img,idx)=>!deletedata.includes(idx));
+        //     const imagesToDelete = req.body.deletecheckbox;
+            
+        //     if (imagesToDelete.length < Product.image.length) {
+                
+        //         deletedata.push(imagesToDelete);
+        //         deletedata = deletedata.flat().map(x => Number(x));
+        //         images = Product.image.filter((img, idx) => !deletedata.includes(idx));
+        //     } else {
+        //         console.error("At least one image must remain.");
+                
+        //     }
+        // }else{
+        //     images =Product.image.map((img)=>{
+        //         return img;
+        //     });
+        // }
+        if (req.body.deletecheckbox) {
+            const imagesToDelete = req.body.deletecheckbox;
+            console.log(imagesToDelete.length,"imagelength",Product.image.length,"checkbox length");
+            if(imagesToDelete.length===Product.image.length){
+                console.error("At least one image must remain.");
+            }
+            else if (imagesToDelete.length < Product.image.length) {
+                deletedata.push(imagesToDelete);
+                deletedata = deletedata.flat().map(x => Number(x));
+                images = Product.image.filter((img, idx) => !deletedata.includes(idx));
+            } else {
+                console.error("At least one image must remain.");
+                // Handle the case where all images are selected for deletion
+            }
+        } else {
+            images = Product.image.map(img => img);
         }
+        
         if(req.files.length!=0){
             for(const file of req.files){
-                console.log(file,"file recieved");
+                // console.log(file,"file recieved");
 
                 const randomInteger = Math.floor(Math.random() * 20000001);
                 const imageDirectory = path.join(
@@ -185,7 +214,7 @@ const editproduct= async (req,res)=>{
                 const imgFileName = "cropped" + randomInteger + ".jpg";
                 const imagePath = path.join(imageDirectory, imgFileName);
         
-                console.log(imagePath, "Image path");
+                // console.log(imagePath, "Image path");
         
                 const croppedImage = await sharp(file.path)
                   .resize(440, 337, {

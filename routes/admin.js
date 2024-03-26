@@ -7,6 +7,7 @@ const categorycontroller= require('../controller/Admin/categoryController')
 const productcontroller=require('../controller/Admin/productController');
 const ordercontroller = require('../controller/Admin/ordercontroller');
 const coupenController= require('../controller/Admin/coupenController');
+const offerController= require('../controller/Admin/offerController');
 const multer=require('../middlewares/multer');
 
 
@@ -17,6 +18,8 @@ const multer=require('../middlewares/multer');
 /* GET home page. */
 admin_route.get('/',adminauthentication.islogout,adminController.adminlogin);
 admin_route.post('/',adminController.verifylogin)
+
+
 admin_route.use(adminauthentication.isLogin)
 admin_route.get('/home',adminController.adminhome);
 admin_route.get('/usermanage',adminController.usermanage);
@@ -57,5 +60,13 @@ admin_route.get('/unlistCoupon',coupenController.unlistCoupon);
 
 //sales Report
 admin_route.get('/salesreport',ordercontroller.loadSalesReport);
+
+//offer routes
+admin_route.get('/listOffers',offerController.listOffers);
+admin_route.get('/addoffer',offerController.loadAddOffer);
+admin_route.post('/addoffer',offerController.addOffer);
+admin_route.get('/editoffer',offerController.loadEditOffer);
+admin_route.put('/editoffer',offerController.editOffer);
+admin_route.get('/unlistoffer',offerController.listAndUlistOffer);
 
 module.exports = admin_route;

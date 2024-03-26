@@ -78,7 +78,8 @@ const loadcheckout= async(req,res)=>{
 const postcheckout = async (req, res) => {
     try {
         const userId = req.session.user_id;
-        const { address, payMethod } = req.body;
+        const { address, paymentMethod,couponCode } = req.body;
+        console.log(paymentMethod,"mhvjkdhfjh");
         const userData = await User.findById(userId);
         const cart = await Cart.findOne({ user: userId })
             .populate({
@@ -112,20 +113,21 @@ const postcheckout = async (req, res) => {
         }
 
         let totalAmount = cartItems.reduce((acc, item) => {
-            const price = item.product.discountPrice && item.product.discountStatus &&
-                new Date(item.product.discountStart) <= new Date() &&
-                new Date(item.product.discountEnd) >= new Date() ?
-                item.product.discountPrice : item.product.price;
-
-            return acc + (price * item.quantity || 0);
-        }, 0);
+            if (item.product.discountPrice && item.product.discountStatus &&
+              new Date(item.product.discountStart) <= new Date() &&
+              new Date(item.product.discountEnd) >= new Date()) {
+              return acc + (item.product.discountPrice * item.quantity || 0);
+            } else {
+              return acc + (item.product.price * item.quantity || 0);
+            }
+          }, 0);
 
         if(couponCode){
             totalAmount = await couponAplly(couponCode, totalAmount, userId);
         }
 
-        if (payMethod == "onlinePayment") {
-   
+        if (paymentMethod == "onlinePayment") {
+            console.log("in razorpay")
             const order = new Order({
               user: userId,
               address: address,
@@ -144,11 +146,11 @@ const postcheckout = async (req, res) => {
                 paymentStatus: "success",
               })),
             });
-      
+            console.log(order,"from razorpay controller");
             await order.save();
     
 
-        }else if(payMethod == "CashOnDelivery") {
+        }else if(paymentMethod == "CashOnDelivery") {
             console.log("in cash on delivery if ")
             const order = new Order({
                 user: userId,
@@ -166,13 +168,52 @@ const postcheckout = async (req, res) => {
                         new Date(cartItem.product.discountEnd) >= new Date() ?
                         cartItem.product.discountPrice : cartItem.product.price,
                     status: "Confirmed",
-                    paymentMethod: payMethod,
+                    paymentMethod: paymentMethod,
                     paymentStatus: 'pending'
                 })),
             });
             console.log(order,"order")
             await order.save();
-        } 
+        } else if(paymentMethod=="Wallet"){
+            const walletData= await Wallet.findOne({user:userId});
+
+            if(totalAmount<=walletData.walletBalance){
+                walletData.walletBalance-=totalAmount;
+                walletData.transaction.pusj({
+                    type:"debit",
+                    amount:totalAmount,
+                });
+                await walletData.save();
+                const order = new Order({
+                    user: userId,
+                    address: address,
+                    orderDate: new Date(),
+          
+                    deliveryDate: new Date(
+                      new Date().getTime() + 5 * 24 * 60 * 60 * 1000
+                    ),
+                    totalAmount: totalAmount,
+                    coupon: couponCode,
+                    items: cartItems.map((cartItem) => ({
+                      product: cartItem.product._id,
+                      quantity: cartItem.quantity,
+                      size: cartItem.size,
+                      price:cartItem.product.discountPrice &&cartItem.product.discountStatus &&new Date(cartItem.product.discountStart) <= new Date() && new Date(cartItem.product.discountEnd) >= new Date()?cartItem.product.discountPrice:cartItem.product.price,
+                  
+                      status: "Confirmed",
+                      paymentMethod: paymentMethod,
+                      paymentStatus: "success",
+                    })),
+                  });
+                
+          
+                  await order.save();
+            }else{
+                return res
+                .status(500)
+                .json({success:false,error:"Insufficent Balance"})
+            }
+        }
 
         cart.items = []; // Clearing items
         cart.totalAmount = 0; // Resetting totalAmount
@@ -344,7 +385,7 @@ const returnOrder= async(req,res)=>{
                 });
 
                 await walletData.save();
-                console.log(walletData,"walletData from return Order")
+                // console.log(walletData,"walletData from return Order")
             }else{
                 const wallet = new Wallet({
                     user: user_id,
@@ -410,12 +451,13 @@ const  apllyCoupon= async(req,res)=>{
 
         let discountedTotal=0;
 
-        discountedTotal= calculateDisountedTotal(orderTotal,coupon.discount);
 
-        if(coupon.maxAmount<discountedTotal){
+        if(coupon.maxAmount<orderTotal){
             errorMessage="The Discont cannot be applied. It is beyond maximum amount";
             return res.json({errorMessage});
         }
+        discountedTotal= calculateDisountedTotal(orderTotal,coupon.discount);
+
             res.status(200).json({success:true,discountedTotal,message:"return sucessfully"});
         
 
@@ -425,6 +467,7 @@ const  apllyCoupon= async(req,res)=>{
 }
 
 async function couponAplly(couponCode,discountedTotal,userId){
+    console.log(couponCode,"kjhjjhjhjkjhhgjkjkh");
     const coupon = await Coupon.findOne({code:couponCode});
     if(!coupon){
         return discountedTotal;
@@ -439,7 +482,7 @@ async function couponAplly(couponCode,discountedTotal,userId){
         return discountedTotal;
     }
 
-    if(coupon.usersUsed.includes(usersId)){
+    if(coupon.usersUsed.includes(userId)){
         return discountedTotal;
     }
 
@@ -451,11 +494,13 @@ async function couponAplly(couponCode,discountedTotal,userId){
     coupon.limit--;
     coupon.usersUsed.push(userId);
     await coupon.save();
+    console.log(discountedTotal,"jjjj");
     return discountedTotal;
 }
 
 const razorPayOrder= async(req,res)=>{
     try{
+        console.log("from razorpayorder function")
         const userId= req.session.user_id;
         console.log(req.body,"gkjgkjfgkjfgkjfk",userId);
         const{address,paymentMethod,couponCode}=req.body;
@@ -478,32 +523,36 @@ const razorPayOrder= async(req,res)=>{
             return res.status(400).json({error:"Billing address not selected"});
         }
 
-        // const cartItems=cart.items||[];
-        // let totalAmount=0;
-        // totalAmount=cartItems.reduce((acc,item)=>acc+(item.product.price?item.product.price* item.quantity:item.product.price * item.quantity || 0),0);
+        const cartItems=cart.items||[];
+        let totalAmount=0;
+        totalAmount=cartItems.reduce((acc,item)=>acc+(item.product.discountPrice?item.product.discountPrice* item.quantity:item.product.price * item.quantity || 0),0);
 
-        // totalAmount = cartItems.reduce((acc, item) => {
-        //     if (item.product.price &&
-        //       new Date(item.product.discountStart) <= new Date() &&
-        //       new Date(item.product.discountEnd) >= new Date()) {
-        //       return acc + (item.product.price * item.quantity || 0);
-        //     } else {
-        //       return acc + (item.product.price * item.quantity || 0);
-        //     }
-        //   }, 0); 
-        const cartItems = cart.items || [];
-        let totalAmount = 0;
-         totalAmount = cartItems.reduce(
-          (acc, item) => acc + (item.product.price * item.quantity || 0),
-          0
-        );
+        totalAmount = cartItems.reduce((acc, item) => {
+            if (item.product.discountPrice && item.product.discountStatus &&
+              new Date(item.product.discountStart) <= new Date() &&
+              new Date(item.product.discountEnd) >= new Date()) {
+              return acc + (item.product.discountPrice * item.quantity || 0);
+            } else {
+              return acc + (item.product.price * item.quantity || 0);
+            }
+          }, 0); 
+          console.log(totalAmount,"from razorpay order",couponCode)
+        // const cartItems = cart.items || [];
+        // let totalAmount = 0;
+        //  totalAmount = cartItems.reduce(
+        //   (acc, item) => acc + (item.product.price * item.quantity || 0),
+        //   0
+        // );
     
           if(couponCode){
             totalAmount= await couponAplly(couponCode,totalAmount,userId);
+            console.log(totalAmount,"from razorpay order")
+
           }
 
+
           const options={
-            amount:Math.round(totalAmount),
+            amount:Math.round(totalAmount*100),
             currency:"INR",
             receipt:`order_${Date.now()}`,
             payment_capture:1,

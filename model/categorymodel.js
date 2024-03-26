@@ -20,7 +20,14 @@ const category = new mongoose.Schema({
     categoryAddDate: {
         type: Date,
         default: Date.now, // Store the current date and time when the user is created
-      }
+    },
+    discountStatus:{
+        type:Boolean,
+        default:false
+      },
+      discount:String,
+      discountStart:Date,
+      discountEnd:Date,
 });
 
 module.exports=mongoose.model("category",category)

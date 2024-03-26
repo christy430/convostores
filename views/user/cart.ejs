@@ -195,31 +195,34 @@
         });
     }
 
-    function updateCart(productId, newQuantity, newSize) {
-        const requestData = {
-            newQuantity,
-            newSize
-        };
+    // Add event listener to quantity inputs
+$(document).on('change', 'input[name="qty"]', function() {
+    const productId = $(this).closest('tr').data('product-id');
+    const newQuantity = $(this).val();
+    const newSize = $(this).closest('tr').find('.size').text(); // Assuming size is stored in a <td> element with class "size"
 
-        fetch(`/updatecart?productId=${productId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
-        })
-        .then(response => response.json())
-        .then(data => {
+    updateCart(productId, newQuantity, newSize);
+});
+
+function updateCart(productId, newQuantity, newSize) {
+    const requestData = {
+        newQuantity,
+        newSize
+    };
+
+    $.ajax({
+        url: `/updatecart?productId=${productId}`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(data) {
             if (data.success) {
-                console.log(data,"from update cart");
                 // Update UI elements without reloading the page
                 const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
-                console.log('Selector:', subtotalSelector);
-                const subtotalElement = document.querySelector(subtotalSelector);
-                console.log('Subtotal Element:', subtotalElement);
+                const subtotalElement = $(subtotalSelector);
 
-                if (subtotalElement) {
-                    subtotalElement.textContent = data.subtotal; // Update subtotal value returned from the server
+                if (subtotalElement.length > 0) {
+                    subtotalElement.text(data.subtotal); // Update subtotal value returned from the server
                 } else {
                     console.error('Subtotal element not found');
                 }
@@ -228,11 +231,54 @@
                 const errorMessage = data.error || 'Unknown error occurred';
                 console.error('Failed to update cart:', errorMessage);
             }
-        })  
-        .catch(error => {
+        },
+        error: function(error) {
             console.error('Error updating cart:', error);
-        });
-    }
+        }
+    });
+}
+
+
+
+    // function updateCart(productId, newQuantity, newSize) {
+    //     const requestData = {
+    //         newQuantity,
+    //         newSize
+    //     };
+
+    //     fetch(`/updatecart?productId=${productId}`, {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(requestData),
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             console.log(data,"from update cart");
+    //             // Update UI elements without reloading the page
+    //             const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
+    //             console.log('Selector:', subtotalSelector);
+    //             const subtotalElement = document.querySelector(subtotalSelector);
+    //             console.log('Subtotal Element:', subtotalElement);
+    //             location.reload();
+
+    //             if (subtotalElement) {
+    //                 subtotalElement.textContent = data.subtotal; // Update subtotal value returned from the server
+    //             } else {
+    //                 console.error('Subtotal element not found');
+    //             }
+    //         } else {
+    //             // Handle error cases
+    //             const errorMessage = data.error || 'Unknown error occurred';
+    //             console.error('Failed to update cart:', errorMessage);
+    //         }
+    //     })  
+    //     .catch(error => {
+    //         console.error('Error updating cart:', error);
+    //     });
+    // }
 </script>
 
 
