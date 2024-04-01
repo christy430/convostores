@@ -35,5 +35,12 @@ module.exports = {
       endOfYear.setFullYear(startOfYear.getFullYear() + 1);
       return { $gte: startOfYear, $lt: endOfYear };
     },
+    getCustomDateRange: function (startDate, endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      return { $gte: start, $lte: end };
+  }
     
   };

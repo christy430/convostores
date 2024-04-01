@@ -129,9 +129,9 @@
             </div>
         </div>
         <div id="invalid">
-            <% if (typeof message !=='undefined' && message) { %>
+            <% if (typeof error !=='undefined' && error) { %>
                 <p style="color: red;" id="message">
-                    <%= message %>
+                    <%= error %>
                 </p>
                 <% } %>
             </div>
@@ -247,14 +247,13 @@ document.getElementById('startDate').addEventListener('change', function () {
                 if (data.success) {
                     window.location.href = '/admin/listOffers';
                 } else {
-
-                    alert('Error occurred while adding coupon23');
+                    alert('Error occurred while adding offer');
                 }
             })
             .catch(error => {
 
                 console.error('Error:', error);
-                alert('Error occurred adding couponeee');
+                alert('Error occurred adding offer');
             });
         }
     }

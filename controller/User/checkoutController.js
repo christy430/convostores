@@ -179,7 +179,7 @@ const postcheckout = async (req, res) => {
 
             if(totalAmount<=walletData.walletBalance){
                 walletData.walletBalance-=totalAmount;
-                walletData.transaction.pusj({
+                walletData.transaction.push({
                     type:"debit",
                     amount:totalAmount,
                 });
@@ -500,9 +500,9 @@ async function couponAplly(couponCode,discountedTotal,userId){
 
 const razorPayOrder= async(req,res)=>{
     try{
-        console.log("from razorpayorder function")
+        // console.log("from razorpayorder function")
         const userId= req.session.user_id;
-        console.log(req.body,"gkjgkjfgkjfgkjfk",userId);
+        // console.log(req.body,"gkjgkjfgkjfgkjfk",userId);
         const{address,paymentMethod,couponCode}=req.body;
         const user= await User.findById(userId);
 
@@ -536,7 +536,7 @@ const razorPayOrder= async(req,res)=>{
               return acc + (item.product.price * item.quantity || 0);
             }
           }, 0); 
-          console.log(totalAmount,"from razorpay order",couponCode)
+        //   console.log(totalAmount,"from razorpay order",couponCode)
         // const cartItems = cart.items || [];
         // let totalAmount = 0;
         //  totalAmount = cartItems.reduce(
@@ -557,7 +557,7 @@ const razorPayOrder= async(req,res)=>{
             receipt:`order_${Date.now()}`,
             payment_capture:1,
           }
-          console.log(options,"hjhgjfhf");
+        //   console.log(options,"hjhgjfhf");
           instance.orders.create(options, async (err, razorpayOrder) => {
             if (err) {
               console.error("Error creating Razorpay order:", err);

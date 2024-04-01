@@ -28,7 +28,7 @@
                         <div class="mb-4">
                             <label for="product_title" class="form-label">Product title</label>
                             <input type="text" placeholder="Type here"  value="<%= product.name %>" name="name" class="form-control" id="product_title">
-                            <div class="error-message" style="color: red;" id="product_title-error"></div>
+                            <div class="error-message" style="color: red;" id="product_title_error"></div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,9 @@
                             </option>
                         <% }); %>
                     </select>
+                    <div class="error-message" style="color: red;" id="product_category_error"></div>
                     <div class="error-message" style="color: red;" id="product_category-error"></div>
+
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
@@ -50,7 +52,8 @@
                             <div class="col-md-4">
                                 <label for="inputPrice" class="form-label">price</label>
                                 <input type="text" class="form-control"  value="<%= product.price %>" name="price" id="product_price" placeholder="enter the price">
-                                <div class="error-message" style="color: red;" id="product_price-error"></div>
+                                <div class="error-message" style="color: red;" id="product_price_error"></div>
+
                             </div>
                         </div>
                         <div class="row gx-3">
@@ -81,7 +84,7 @@
                         <div>
                             <label class="form-label">Description</label>
                             <textarea placeholder="Type here" name="description" id="description"  class="form-control" rows="4"><%= product.description %></textarea>
-                            <div class="error-message" style="color: red;" id="description-error"></div>
+                            <div class="error-message" style="color: red;" id="description_error"></div>
                         </div>
                     </div>
                 </div> 
@@ -111,7 +114,8 @@
                                         <% } %>
                                     </div>
                                     <input class="form-control" name="image"  multiple="multiple" type="file" onchange="displayImages(this)">
-                                    <div class="error-message" style="color: red;" id="product_image-error"></div>
+                                    <div class="error-message" style="color: red;" id="imageError"></div>
+                                    
                                 </div>                                
                             </div>
                         </div>

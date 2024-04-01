@@ -21,9 +21,11 @@ const loadWishlist = async(req,res)=>{
 
 const addToWishlist= async(req,res)=>{
     try{
+        if (!req.session || !req.session.user_id) {
+            return res.redirect('/login');
+        }
         const userId= req.session.user_id;
         const productId= req.body.productId;
-
         let userWishlist= await Wishlist.findOne({user:userId});
 
         if(!userWishlist){

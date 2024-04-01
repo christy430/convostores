@@ -5,7 +5,7 @@ const Product=require('../../model/productmodel');
 const loadAllCategory= async(req,res)=>{
     try{
         const products= await Product.find();
-       const categories= await Category.find();
+        const categories= await Category.find();
         res.render("./user/allcategory",{user:null,products,categories});
     }catch(error){
         console.log(error);

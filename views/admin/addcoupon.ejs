@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mb-4">
-                <a href="/admin/couponList">
+                <a href="/admin/viewCoupon">
                     <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
                 </a>
                 <button type="button" onclick="addCoupon(event)" class="btn btn-md rounded font-sm hover-up">Add Coupon</button>
@@ -156,7 +156,7 @@ console.log(expiryDate,"expiryDate");
         .then(data => {
          
             if (data.success) {
-                window.location.href = '/admin/couponList';
+                window.location.href = '/admin/viewCoupon';
             } else {
                 // Handle response with errors
                 alert('Error occurred while adding coupon');

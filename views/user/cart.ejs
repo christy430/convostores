@@ -76,6 +76,7 @@
                                                         </td>
                                                         <td class="text-center" data-title="Stock">
                                                             <div class="cart-product-quantity">
+                                                                
                                                                 <input type="number" class="form-control" name="qty" value="<%= cartData.quantity %>" min="1" max="10" step="1" data-decimals="0" required onchange="updateCart('<%= cartData.product._id %>', this.value,'<%=cartData.size%>')">
                                                             </div>
                                                         </td>
@@ -184,8 +185,11 @@
                 const removedElement = document.querySelector(`tr[data-product-id="${productId}"]`);
                 if (removedElement) {
                     removedElement.remove();
+
                 }
                 localStorage.setItem('productRemoved', 'true');
+                location.reload();
+
             } else {
                 console.error('Failed to remove cart item:', data.error);
             }
@@ -204,81 +208,87 @@ $(document).on('change', 'input[name="qty"]', function() {
     updateCart(productId, newQuantity, newSize);
 });
 
+// function updateCart(productId, newQuantity, newSize) {
+//     const requestData = {
+//         newQuantity,
+//         newSize
+//     };
+
+//     $.ajax({
+//         url: `/updatecart?productId=${productId}`,
+//         type: 'PUT',
+//         contentType: 'application/json',
+//         data: JSON.stringify(requestData),
+//         success: function(data) {
+//             if (data.success) {
+//                 // Update UI elements without reloading the page
+//                 const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
+//                 const subtotalElement = $(subtotalSelector);
+
+//                 if (subtotalElement.length > 0) {
+//                     subtotalElement.text(data.subtotal); // Update subtotal value returned from the server
+//                 } else {
+//                     console.error('Subtotal element not found');
+//                 }
+//             } else {
+//                 // Handle error cases
+//                 const errorMessage = data.error || 'Unknown error occurred';
+//                 console.error('Failed to update cart:', errorMessage);
+//             }
+//         },
+//         error: function(error) {
+//             console.error('Error updating cart:', error);
+//         }
+//     });
+// }
+
+
+
 function updateCart(productId, newQuantity, newSize) {
     const requestData = {
         newQuantity,
         newSize
     };
 
-    $.ajax({
-        url: `/updatecart?productId=${productId}`,
-        type: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function(data) {
-            if (data.success) {
-                // Update UI elements without reloading the page
-                const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
-                const subtotalElement = $(subtotalSelector);
-
-                if (subtotalElement.length > 0) {
-                    subtotalElement.text(data.subtotal); // Update subtotal value returned from the server
-                } else {
-                    console.error('Subtotal element not found');
-                }
-            } else {
-                // Handle error cases
-                const errorMessage = data.error || 'Unknown error occurred';
-                console.error('Failed to update cart:', errorMessage);
-            }
+    fetch(`/updatecart?productId=${productId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
         },
-        error: function(error) {
-            console.error('Error updating cart:', error);
+        body: JSON.stringify(requestData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(data, "from update cart");
+            // Update UI elements without reloading the page
+            const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
+            console.log('Selector:', subtotalSelector);
+            const subtotalElement = document.querySelector(subtotalSelector);
+            console.log('Subtotal Element:', subtotalElement);
+            location.reload();
+
+            if (subtotalElement) {
+                subtotalElement.textContent = data.subtotal; // Update subtotal value returned from the server
+            } else {
+                console.error('Subtotal element not found');
+            }
+        } else {
+            // Handle error cases
+            const errorMessage = data.error || 'Unknown error occurred';
+            console.error('Failed to update cart:', errorMessage);
         }
+        // Check if there's a cart validation message
+        if (data.validationError) {
+            // Display validation error message to the user
+            alert(data.validationError);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating cart:', error);
     });
 }
 
-
-
-    // function updateCart(productId, newQuantity, newSize) {
-    //     const requestData = {
-    //         newQuantity,
-    //         newSize
-    //     };
-
-    //     fetch(`/updatecart?productId=${productId}`, {
-    //         method: 'PUT',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(requestData),
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         if (data.success) {
-    //             console.log(data,"from update cart");
-    //             // Update UI elements without reloading the page
-    //             const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
-    //             console.log('Selector:', subtotalSelector);
-    //             const subtotalElement = document.querySelector(subtotalSelector);
-    //             console.log('Subtotal Element:', subtotalElement);
-    //             location.reload();
-
-    //             if (subtotalElement) {
-    //                 subtotalElement.textContent = data.subtotal; // Update subtotal value returned from the server
-    //             } else {
-    //                 console.error('Subtotal element not found');
-    //             }
-    //         } else {
-    //             // Handle error cases
-    //             const errorMessage = data.error || 'Unknown error occurred';
-    //             console.error('Failed to update cart:', errorMessage);
-    //         }
-    //     })  
-    //     .catch(error => {
-    //         console.error('Error updating cart:', error);
-    //     });
-    // }
 </script>
 
 

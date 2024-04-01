@@ -46,8 +46,6 @@ const loadcart= async(req,res)=>{
                 }
                 // console.log( subtotalwithshipping,"const subtotalwithshipping")
                 res.render('./user/cart',{ user:userdata,productTotal,subtotalwithshipping,outofstockerror,maxquantityerror,cart});  
-            }else{
-                res.render('./user/cart',{userdata,cart:null,subtotalwithshipping:0});
             }
         }else{
             res.redirect('/login');
@@ -55,6 +53,7 @@ const loadcart= async(req,res)=>{
     
     }catch(error){
         console.log(error);
+        
     }
 }
 
@@ -120,12 +119,8 @@ const updatecart= async(req,res)=>{
     try{
        
         const userid=req.session.user_id;
-        
         const productid=req.query.productId;
-
-
         const{newQuantity,newSize}=req.body;
-
         let newsizeData=parseInt(newSize,10)
 
         const existingcart= await cart.findOne({user:userid}).populate("items.product");

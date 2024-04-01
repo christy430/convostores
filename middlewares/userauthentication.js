@@ -1,8 +1,14 @@
 const User = require("../model/usermodel");
 
 const isLogin = async(req,res,next)=>{
-    const userData = await User.findOne({ _id:req.session.user_id });
+    console.log(req.url);
+    
     try{
+        const userData = await User.findOne({ _id:req.session.user_id });
+    if(!userData){
+        console.log("in if condition middleware")
+        
+    }
     
 
         if(req.session.user_id &&  userData.is_admin==0 && userData.is_blocked==0){
@@ -14,11 +20,13 @@ const isLogin = async(req,res,next)=>{
                 res.render("./user/login", { alert: "You are blocked from this site!" });
             }
             else{
-                res.redirect('/');
+                res.render("./user/login", { alert: "You are blocked from this site!" });
             }
         } 
     }catch(error){
-        console.log(error.message);
+        res.render("./user/login", { alert: "You are blocked from this site!" });
+        console.log(error.message,"from middleware");
+        
     }
 }
 

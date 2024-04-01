@@ -567,10 +567,28 @@
                                         const orderData = await createOrderResponse.json();
 
                                         if (orderData.success) {
-                                            console.log("Order created successfully");
+                                                Swal.fire({
+                                                title: "Success",
+                                                text: data.message,
+                                                icon: "success",
+                                                timer: 2000,
+                                                timeProgressBar: true,
+                                                showConfirmButton: true,
+                                            }).then(()=>{
+                                                 window.location.href = "/ordersuccess";
+                                            })
+                                            // console.log("Order created successfully");
                                             // Redirect to order confirmation page or any other desired action
-                                            window.location.href = "/ordersuccess";
+                                            // window.location.href = "/ordersuccess";
                                         } else {
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "Failed to create order. Please try again later.",
+                                                icon: "error",
+                                                showConfirmButton: true
+                                            });
+                                            // Handle any additional error handling or logging as needed
+                                            console.error("Error in order creation:", orderData.error);
                                             // Handle error in order creation
                                             console.error("Error in order creation:", orderData.error);
                                         }

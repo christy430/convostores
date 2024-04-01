@@ -20,7 +20,9 @@ const calculateProductTotal=(cart)=>{
         new Date(cartitem.product.discountEnd)>= new Date();
 
         const priceToconsider= isDicsounted? cartitem.product.discountPrice:cartitem.product.price;
-        const total= priceToconsider*cartitem.quantity;
+        // const total= priceToconsider*cartitem.quantity.toFixed(2);
+        const total = parseFloat((priceToconsider * cartitem.quantity).toFixed(2));
+
 
         console.log("from config cartsum:-", total);
         productTotal.push(total);
