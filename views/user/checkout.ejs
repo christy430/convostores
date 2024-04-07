@@ -343,15 +343,11 @@
 
                     </div>
                     <%if (subtotalWithShipping !=0) {%>
-
                         <a href="#" id="btn_checkout" class="btn btn-fill-out btn-block mt-30">Place Order</a>
                         <% }else{ %>
-
-                            <button id="btn_checkout" class="btn btn-fill-out btn-block mt-30" disabled>Place
-                                Order</button>
+                            <button id="btn_checkout" class="btn btn-fill-out btn-block mt-30" disabled>Place Order</button>
                             <% } %>
-
-                </div>
+                            </div>
             </div>
         </div>
         </div>
@@ -376,7 +372,7 @@
         });
     });
     document.addEventListener('DOMContentLoaded', function () {
-
+    
 
 
         const applyCouponButton = document.getElementById('applyCouponButton');
@@ -453,7 +449,7 @@
 
 
         const totalAfterCouponElement = document.getElementById('totalAfterCoupon');
-
+        
         let btn_checkout = document.getElementById('btn_checkout');
         btn_checkout.addEventListener('click', function () {
 
@@ -488,6 +484,7 @@
             };
 
             if (selectedPaymentMethod == "CashOnDelivery") {
+                
                 fetch('/checkout', {
                     method: 'POST',
                     headers: {
@@ -508,16 +505,17 @@
                                 timeProgressBar: true,
                                 showConfirmButton: true,
                             }).then(() => {
+                                
                                 // Redirect after displaying the success message
                                 window.location.href = '/ordersuccess';
                             });
                         } else {
-                            Swal.fire("Error!", "Failed to perform the action", "error");
+                            Swal.fire("Error!",data.error || "Failed to perform the action", "error");
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Error occurred while placing order');
+                        Swal.fire('Error occurred while placing order');
                     });
             } else if (selectedPaymentMethod == "onlinePayment") {
                 const date=new Date()

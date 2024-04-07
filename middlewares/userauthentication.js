@@ -1,7 +1,7 @@
 const User = require("../model/usermodel");
 
 const isLogin = async(req,res,next)=>{
-    console.log(req.url);
+    // console.log(req.url);
     
     try{
         const userData = await User.findOne({ _id:req.session.user_id });

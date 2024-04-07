@@ -87,7 +87,7 @@ const postcheckout = async (req, res) => {
                 model: "product",
             })
             .populate("user");
-        console.log(cart,"hjjhgjhghjghjgjbmnjk");
+    
         if (!userData || !cart) {
             console.log("hello from !userData || !cart")
             return res.status(500).json({ success: false, error: "User or cart not found" });
@@ -101,8 +101,8 @@ const postcheckout = async (req, res) => {
         const cartItems = cart.items || [];
         for (const cartItem of cartItems) {
             const product = cartItem.product;
-            console.log("in for loop")
-
+            // console.log("in for loop")
+            // console.log(product,"product datta");
             product?.sizes.map((size) => {
                 if (size.size == cartItem.size) {
                     size.stock -= cartItem.quantity;
@@ -151,7 +151,13 @@ const postcheckout = async (req, res) => {
     
 
         }else if(paymentMethod == "CashOnDelivery") {
-            console.log("in cash on delivery if ")
+            console.log(totalAmount,"in cash on delivery if ")
+            if(totalAmount>10000){
+                console.log('sdFsdf');
+                return res
+                .status(500)
+                .json({success:false,error:"Cannot chose CashOndelievery for orders above 10,000"})
+            }
             const order = new Order({
                 user: userId,
                 address: address,
@@ -172,7 +178,7 @@ const postcheckout = async (req, res) => {
                     paymentStatus: 'pending'
                 })),
             });
-            console.log(order,"order")
+            // console.log(order,"order")
             await order.save();
         } else if(paymentMethod=="Wallet"){
             const walletData= await Wallet.findOne({user:userId});
@@ -319,6 +325,30 @@ const cancelorder = async (req, res) => {
 
         product.status = "Cancelled";
         product.reason = reason;
+
+         // Credit amount back to wallet
+         const walletData = await Wallet.findOne({ user: user_id });
+         if (walletData) {
+             walletData.walletBalance += (product.price * product.quantity);
+ 
+             walletData.transaction.push({
+                 type: "credit",
+                 amount: product.price * product.quantity
+             });
+ 
+             await walletData.save();
+         } else {
+             const wallet = new Wallet({
+                 user: user_id,
+                 transaction: [{
+                     type: "credit",
+                     amount: product.price * product.quantity
+                 }],
+                 walletBalance: product.price * product.quantity
+             });
+ 
+             await wallet.save();
+         }
 
         totalAmount = totalAmount - ((product.price * product.quantity)  / 100);
 
@@ -557,7 +587,6 @@ const razorPayOrder= async(req,res)=>{
             receipt:`order_${Date.now()}`,
             payment_capture:1,
           }
-        //   console.log(options,"hjhgjfhf");
           instance.orders.create(options, async (err, razorpayOrder) => {
             if (err) {
               console.error("Error creating Razorpay order:", err);

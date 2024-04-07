@@ -7,7 +7,7 @@ const calculatesubtotal=(cart)=>{
 
         const priceToconsider = isDiscounted? cartitem.product.discountPrice: cartitem.product.price;
 
-        subtotal+= priceToconsider*cartitem.quantity;
+        subtotal+=parseFloat((priceToconsider*cartitem.quantity).toFixed(2));
     }
     return subtotal;
 }
@@ -24,7 +24,7 @@ const calculateProductTotal=(cart)=>{
         const total = parseFloat((priceToconsider * cartitem.quantity).toFixed(2));
 
 
-        console.log("from config cartsum:-", total);
+        // console.log("from config cartsum:-", total);
         productTotal.push(total);
     }
     return productTotal;
@@ -35,8 +35,8 @@ function calculateDisountedTotal(total,discountpercentage){
         throw new Error('Discount percentage must be between 0 and 100.');
     }
     const discountAmount=(discountpercentage/100)*total;
-    const discountedTotal= total-discountAmount;
-console.log(discountedTotal,"fdfdfdfdf");
+    const discountedTotal= parseFloat((total-discountAmount).toFixed(2));
+    console.log(discountedTotal,"fdfdfdfdf");
     return discountedTotal;
 }
 

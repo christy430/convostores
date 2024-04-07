@@ -1,6 +1,6 @@
 <%- include('../layout/adminheader') %>
 
-<form action="" method="post" enctype="multipart/form-data" id="product-form" onsubmit="return validationChecking()">
+<form action="" method="post" enctype="multipart/form-data" id="product-form" onsubmit="return validationChecking(event)">
     <section class="content-main">
         <div class="row">
             <div class="col-12">
@@ -37,14 +37,12 @@
                     <select name="Category" class="form-control">
                         <option value="">Select a Category</option>
                         <% categories?.forEach(category => { %>
-                            <option value="<%= category._id %>"  <% if (category._id.toString() === product.category.toString()) { %>disabled selected <% } %> >
+                            <option value="<%= category._id %>"  <% if (category._id.toString() === product.category.toString()) { %>selected <% } %> >
                                 <%= category.name %>
                             </option>
                         <% }); %>
                     </select>
                     <div class="error-message" style="color: red;" id="product_category_error"></div>
-                    <div class="error-message" style="color: red;" id="product_category-error"></div>
-
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
@@ -53,7 +51,6 @@
                                 <label for="inputPrice" class="form-label">price</label>
                                 <input type="text" class="form-control"  value="<%= product.price %>" name="price" id="product_price" placeholder="enter the price">
                                 <div class="error-message" style="color: red;" id="product_price_error"></div>
-
                             </div>
                         </div>
                         <div class="row gx-3">
@@ -75,7 +72,6 @@
                                                 </div>
                                             </div>
                                         <% }); %>
-                                        <!-- Add Product Images Here -->
                                     </div>
                                     <button type="button" class="btn btn-primary mt-3" onclick="addSize()">Add size</button>
                                 </div>
@@ -115,7 +111,6 @@
                                     </div>
                                     <input class="form-control" name="image"  multiple="multiple" type="file" onchange="displayImages(this)">
                                     <div class="error-message" style="color: red;" id="imageError"></div>
-                                    
                                 </div>                                
                             </div>
                         </div>
@@ -143,7 +138,7 @@
         if (input.files && input.files.length > 0) {
             for (let i = 0; i < input.files.length; i++) {
                 const reader = new FileReader();
-                 reader.onload = function (e) {
+                reader.onload = function (e) {
                     const imagePreview = document.createElement('div');
                     imagePreview.classList.add('image-container');
                     const img = document.createElement('img');
@@ -153,33 +148,30 @@
                     img.classList.add('image-preview');
                     imagePreview.appendChild(img);
                     previewContainer.appendChild(imagePreview);
-                    };
-                    reader.readAsDataURL(input.files[i]);
-                }
-            } else {
-                const defaultImagePreview = document.createElement('div');
-                defaultImagePreview.classList.add('image-container');
-                const defaultImg = document.createElement('img');
-                defaultImg.src = '/uploadimage.svg';
-                defaultImg.style.width = '100px';
-                defaultImg.style.height = '100px';
-                defaultImg.classList.add('image-preview');
-                defaultImagePreview.appendChild(defaultImg);
-                previewContainer.appendChild(defaultImagePreview);
+                };
+                reader.readAsDataURL(input.files[i]);
             }
+        } else {
+            const defaultImagePreview = document.createElement('div');
+            defaultImagePreview.classList.add('image-container');
+            const defaultImg = document.createElement('img');
+            defaultImg.src = '/uploadimage.svg';
+            defaultImg.style.width = '100px';
+            defaultImg.style.height = '100px';
+            defaultImg.classList.add('image-preview');
+            defaultImagePreview.appendChild(defaultImg);
+            previewContainer.appendChild(defaultImagePreview);
         }
-</script>
+    }
 
-
-<script>
     let sizeCount = 0;
     function addSize() {
-            sizeCount++;
-            const container = document.querySelector('.size-container');
-            const sizeDiv = document.createElement('div');
-            sizeDiv.classList.add('row', 'my-1');
+        sizeCount++;
+        const container = document.querySelector('.size-container');
+        const sizeDiv = document.createElement('div');
+        sizeDiv.classList.add('row', 'my-1');
 
-            sizeDiv.innerHTML = `
+        sizeDiv.innerHTML = `
                 <div class="col-5">
                     <label for="size[${sizeCount}]">Size :</label>
                     <input type="text" name="sizes[${sizeCount}][size]" placeholder="Type here" class="form-control" id="size${sizeCount}">
@@ -193,134 +185,88 @@
                     </div>
             `;
 
-            container.appendChild(sizeDiv);
-}
+        container.appendChild(sizeDiv);
+    }
 
-
-        function displayImage(imageNumber, input) {
-            const preview = document.getElementById(`image-preview${imageNumber}`);
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.src = '';
-            }
-        }
-        
     function removeSize(button) {
         const container = document.querySelector('.size-container');
         const sizeDiv = button.parentElement.parentElement; // Get the parent div containing the size and stock fields.
         container.removeChild(sizeDiv); // Remove the parent div from the container.
     }
 
-    function viewImage(event, imageIndex) {
-    const imgView = document.getElementById(`imgView${imageIndex}`);
-    imgView.src = URL.createObjectURL(event.target.files[0]);
-}
+    function validationChecking(event) {
+        const product_title = document.getElementById("product_title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const product_price = parseFloat(document.getElementById("product_price").value);
+        const product_category = document.querySelector('select[name="Category"]').value.trim();
+        const imageInput = document.querySelector('input[name="image"]');
+        const imageError = document.getElementById("imageError");
+        const product_title_error = document.getElementById("product_title_error");
+        const description_error = document.getElementById("description_error");
+        const product_price_error = document.getElementById("product_price_error");
+        const product_category_error = document.getElementById("product_category_error");
 
-function validationChecking() {
-    const product_title = document.getElementById("product_title").value.trim();
-    const description = document.getElementById("description").value.trim();
-    const product_price = parseFloat(document.getElementById("product_price").value);
-    const product_category = document.querySelector('select[name="category"]').value.trim();
-    const product_brand = document.querySelector('select[name="brand"]').value.trim();
-    const product_gender = document.querySelector('select[name="genderData"]').value.trim();
-    const imageInput = document.querySelector('input[name="image"]');
-    const imageError = document.getElementById("product_image-error");
-    const product_title_error = document.getElementById("product_title-error");
-    const description_error = document.getElementById("description-error");
-    const product_price_error = document.getElementById("product_price-error");
-    const product_category_error = document.getElementById("product_category-error");
-    const product_brand_error = document.getElementById("product_brand-error");
-    const gender_error = document.getElementById("gender-error");
+        let formIsValid = true;
 
-    let formIsValid = true;
-
-    if (!(product_title.length >= 2 && /^[a-zA-Z\s]/.test(product_title))) {
-        product_title_error.innerHTML = "Please enter a valid product name";
-        formIsValid = false;
-    } else {
-        product_title_error.innerHTML = "";
-    }
-
-    if (isNaN(product_price) || product_price < 1) {
-        product_price_error.innerHTML = "Please enter a valid price";
-        formIsValid = false;
-    } else {
-        product_price_error.innerHTML = "";
-    }
-
-    if (!(description.length >= 2 && /^[a-zA-Z\s]/.test(description))) {
-        description_error.innerHTML = "Please enter product description";
-        formIsValid = false;
-    } else {
-        description_error.innerHTML = "";
-    }
-
-    if (product_category === "") {
-        product_category_error.innerHTML = "Please select a category";
-        formIsValid = false;
-    } else {
-        product_category_error.innerHTML = "";
-    }
-
-    if (product_brand === "") {
-        product_brand_error.innerHTML = "Please select a brand";
-        formIsValid = false;
-    } else {
-        product_brand_error.innerHTML = "";
-    }
-
-    if (product_gender === "") {
-        gender_error.innerHTML = "Please select a valid gender";
-        formIsValid = false;
-    } else {
-        gender_error.innerHTML = "";
-    }
-
-    if (imageInput.files.length === 0) {
-        imageError.innerHTML = "Please upload at least one image";
-        formIsValid = false;
-    } else {
-        imageError.innerHTML = "";
-    }
-    
-    const deleteCheckboxes = document.querySelectorAll('input[name="deletecheckbox"]:checked');
-    if (deleteCheckboxes.length === imageInput.files.length) {
-        imageError.innerHTML = "Please keep at least one image";
-        formIsValid = false;
-    } else {
-        imageError.innerHTML = "";
-    }
-
-    const sizeCount = 5; 
-    for (let i = 1; i <= sizeCount; i++) {
-        const sizeInput = document.getElementById(`size${i}`).value.trim();
-        const stockInput = document.getElementById(`stock${i}`).value.trim();
-        const sizeError = document.getElementById(`size${i}-error`);
-        const stockError = document.getElementById(`stock${i}-error`);
-
-        sizeError.innerHTML = sizeInput === "" || isNaN(sizeInput) || parseFloat(sizeInput) < 0
-            ? "Please enter a valid size"
-            : "";
-        stockError.innerHTML = stockInput === "" || isNaN(stockInput) || parseFloat(stockInput) < 0
-            ? "Please enter valid stock"
-            : "";
-
-        if (sizeError.innerHTML !== "" || stockError.innerHTML !== "") {
+        if (!(product_title.length >= 2 && /^[a-zA-Z\s]+$/.test(product_title))) {
+            product_title_error.innerHTML = "Please enter a valid product name";
             formIsValid = false;
+        } else {
+            product_title_error.innerHTML = "";
         }
+
+        if (isNaN(product_price) || product_price <= 0) {
+            product_price_error.innerHTML = "Please enter a valid price";
+            formIsValid = false;
+        } else {
+            product_price_error.innerHTML = "";
+        }
+
+        if (!(description.length >= 2 && /^[a-zA-Z\s]+$/.test(description))) {
+            description_error.innerHTML = "Please enter product description";
+            formIsValid = false;
+        } else {
+            description_error.innerHTML = "";
+        }
+
+        if (product_category === "") {
+            product_category_error.innerHTML = "Please select a category";
+            formIsValid = false;
+        } else {
+            product_category_error.innerHTML = "";
+        }
+
+        if (imageInput.files.length === 0) {
+            imageError.innerHTML = "Please upload at least one image";
+            formIsValid = false;
+        } else {
+            imageError.innerHTML = "";
+        }
+
+        const deleteCheckboxes = document.querySelectorAll('input[name="deletecheckbox"]:checked');
+        if (deleteCheckboxes.length === imageInput.files.length) {
+            imageError.innerHTML = "Please keep at least one image";
+            formIsValid = false;
+        } else {
+            imageError.innerHTML = "";
+        }
+
+        const sizeInputs = document.querySelectorAll('.size-container input[type="text"]');
+        sizeInputs.forEach((sizeInput) => {
+            if (!sizeInput.value.trim()) {
+                sizeInput.classList.add('is-invalid');
+                formIsValid = false;
+            } else {
+                sizeInput.classList.remove('is-invalid');
+            }
+        });
+
+        if (!formIsValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+
+        return formIsValid;
     }
-
-    return formIsValid;
-}
-
 </script>
-
-
 
 <%- include('../layout/adminfooter') %>
