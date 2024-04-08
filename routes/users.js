@@ -88,6 +88,11 @@ router.delete('/removefromcart',authentication.isLogin,cartcontroller.removefrom
 
 //category-wise-products
 router.get('/allcategory',categoryController.loadAllCategory);
+
+router.get('/shopCategoryFilter/:id?',categoryController.loadAllCategory);
+router.get('/filterProducts',categoryController.filterProducts);
+router.get('/sorting/:id?',categoryController.loadAllCategory);
+
 router.get('/menscategory',categoryController.loadMensCategory);
 router.get('/womenscategory',categoryController.loadWomensCategory);
 router.get('/kidscategory',categoryController.loadkidsCategory);

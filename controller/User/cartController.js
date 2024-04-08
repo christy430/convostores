@@ -140,8 +140,12 @@ const updatecart= async(req,res)=>{
             }
             console.log(existingcart,"existingcart");
             await existingcart.save();
-            return res.status(200).json({success:true,message:'Cart updates successfully'});
-        }else{
+            return res.status(200).json({
+              success: true,
+              message: 'Cart updates successfully',
+              subtotal: existingcart.subtotal, // Assuming you have the subtotal value in your cart object
+              total: existingcart.total // Assuming you have the total value in your cart object
+          });        }else{
             return res.status(400).json({success:false,error:'out of stock or invalid quantity'});
         }
     }catch(error){

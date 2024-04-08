@@ -208,13 +208,12 @@
 
         let formIsValid = true;
 
-        if (!(product_title.length >= 2 && /^[a-zA-Z\s]+$/.test(product_title))) {
-            product_title_error.innerHTML = "Please enter a valid product name";
+        if (!(/^[a-zA-Z0-9\s]+$/.test(product_title))) {
+            product_title_error.innerHTML = "Please enter a valid product name containing only characters and numbers";
             formIsValid = false;
         } else {
             product_title_error.innerHTML = "";
         }
-
         if (isNaN(product_price) || product_price <= 0) {
             product_price_error.innerHTML = "Please enter a valid price";
             formIsValid = false;
@@ -222,13 +221,12 @@
             product_price_error.innerHTML = "";
         }
 
-        if (!(description.length >= 2 && /^[a-zA-Z\s]+$/.test(description))) {
-            description_error.innerHTML = "Please enter product description";
+        if (!(/^[a-zA-Z0-9\s,-]+$/).test(description)) {
+            description_error.innerHTML = "Please enter a valid product description containing letters, numbers, spaces, commas, and hyphens";
             formIsValid = false;
         } else {
             description_error.innerHTML = "";
         }
-
         if (product_category === "") {
             product_category_error.innerHTML = "Please select a category";
             formIsValid = false;
@@ -236,20 +234,20 @@
             product_category_error.innerHTML = "";
         }
 
-        if (imageInput.files.length === 0) {
-            imageError.innerHTML = "Please upload at least one image";
-            formIsValid = false;
-        } else {
-            imageError.innerHTML = "";
-        }
+        // if (imageInput.files.length === 0) {
+        //     imageError.innerHTML = "Please upload at least one image";
+        //     formIsValid = false;
+        // } else {
+        //     imageError.innerHTML = "";
+        // }
 
-        const deleteCheckboxes = document.querySelectorAll('input[name="deletecheckbox"]:checked');
-        if (deleteCheckboxes.length === imageInput.files.length) {
-            imageError.innerHTML = "Please keep at least one image";
-            formIsValid = false;
-        } else {
-            imageError.innerHTML = "";
-        }
+        // const deleteCheckboxes = document.querySelectorAll('input[name="deletecheckbox"]:checked');
+        // if (deleteCheckboxes.length === imageInput.files.length) {
+        //     imageError.innerHTML = "Please keep at least one image";
+        //     formIsValid = false;
+        // } else {
+        //     imageError.innerHTML = "";
+        // }
 
         const sizeInputs = document.querySelectorAll('.size-container input[type="text"]');
         sizeInputs.forEach((sizeInput) => {

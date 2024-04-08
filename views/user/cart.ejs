@@ -261,17 +261,20 @@ function updateCart(productId, newQuantity, newSize) {
     .then(data => {
         if (data.success) {
             console.log(data, "from update cart");
-            // Update UI elements without reloading the page
-            const subtotalSelector = `tr[data-product-id="${productId}"] .text-right span`;
-            console.log('Selector:', subtotalSelector);
-            const subtotalElement = document.querySelector(subtotalSelector);
-            console.log('Subtotal Element:', subtotalElement);
-            location.reload();
 
-            if (subtotalElement) {
-                subtotalElement.textContent = data.subtotal; // Update subtotal value returned from the server
+            // Update UI elements without reloading the page
+            const productTotalElement = document.querySelector(`tr[data-product-id="${productId}"] .text-right span`);
+            const quantityInputElement = document.querySelector(`tr[data-product-id="${productId}"] input[name="qty"]`);
+            // const cartSubtotalElement = document.querySelector('.cart_total_amount span'); // Assuming you have a single subtotal element
+            // const cartTotalElement = document.querySelector('.cart_total_amount strong span'); // Assuming you have a single total element
+            
+            if (productTotalElement && quantityInputElement && cartSubtotalElement && cartTotalElement) {
+                productTotalElement.textContent = data.subtotal; // Update product total
+                quantityInputElement.value = data.newQuantity; // Update quantity input value
+                // cartSubtotalElement.textContent = data.subtotal; // Update cart subtotal
+                // cartTotalElement.textContent = data.total; // Update cart total
             } else {
-                console.error('Subtotal element not found');
+                console.error('One or more elements not found');
             }
         } else {
             // Handle error cases

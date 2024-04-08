@@ -156,7 +156,7 @@ const postcheckout = async (req, res) => {
                 console.log('sdFsdf');
                 return res
                 .status(500)
-                .json({success:false,error:"Cannot chose CashOndelievery for orders above 10,000"})
+                .json({success:false,error:"Cannot chose CashOnDelivery for orders above 10,000\nPlease select another payment option"})
             }
             const order = new Order({
                 user: userId,
@@ -497,7 +497,7 @@ const  apllyCoupon= async(req,res)=>{
 }
 
 async function couponAplly(couponCode,discountedTotal,userId){
-    console.log(couponCode,"kjhjjhjhjkjhhgjkjkh");
+    // console.log(couponCode,"kjhjjhjhjkjhhgjkjkh");
     const coupon = await Coupon.findOne({code:couponCode});
     if(!coupon){
         return discountedTotal;
@@ -566,13 +566,7 @@ const razorPayOrder= async(req,res)=>{
               return acc + (item.product.price * item.quantity || 0);
             }
           }, 0); 
-        //   console.log(totalAmount,"from razorpay order",couponCode)
-        // const cartItems = cart.items || [];
-        // let totalAmount = 0;
-        //  totalAmount = cartItems.reduce(
-        //   (acc, item) => acc + (item.product.price * item.quantity || 0),
-        //   0
-        // );
+       
     
           if(couponCode){
             totalAmount= await couponAplly(couponCode,totalAmount,userId);
@@ -587,12 +581,25 @@ const razorPayOrder= async(req,res)=>{
             receipt:`order_${Date.now()}`,
             payment_capture:1,
           }
+          console.log(options,"from razorpay,options")
           instance.orders.create(options, async (err, razorpayOrder) => {
             if (err) {
-              console.error("Error creating Razorpay order:", err);
-              return res
-                .status(400)
-                .json({ success: false, error: "Payment Failed", user });
+            //   console.error("Error creating Razorpay order:", err);
+            //   return res
+            //     .status(400)
+            //     .json({ success: false, error: "Payment Failed", user });
+            const order = new Order({
+                user: userId,
+                items: cartItems.map(item => ({
+                  product: item.product._id,
+                  quantity: item.quantity
+                })),
+                totalAmount: totalAmount,
+                status: "payment pending"
+              });
+              await order.save();
+              console.log("in error part")
+              return res.status(400).json({ success: false, error: "Payment Failed", user });
             } else {
               res.status(201).json({
                 success: true,

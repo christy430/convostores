@@ -12,7 +12,7 @@ const isLogin = async(req,res,next)=>{
     
 
         if(req.session.user_id &&  userData.is_admin==0 && userData.is_blocked==0){
-            console.log(req.session.user_id);
+            console.log(req.session.user_id,"middleware");
             next();
         }else{
             if(userData.is_blocked==1){

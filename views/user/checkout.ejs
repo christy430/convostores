@@ -575,9 +575,6 @@
                                             }).then(()=>{
                                                  window.location.href = "/ordersuccess";
                                             })
-                                            // console.log("Order created successfully");
-                                            // Redirect to order confirmation page or any other desired action
-                                            // window.location.href = "/ordersuccess";
                                         } else {
                                             Swal.fire({
                                                 title: "Error",
@@ -613,7 +610,7 @@
                         }
 
                     })
-                    .catch(error => {
+                    .catch(error => {   
                         console.error('Error:', error);
                         alert('Error occurred while placing orderewew');
                     });
