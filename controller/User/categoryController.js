@@ -13,15 +13,15 @@ const loadAllCategory= async(req,res)=>{
         const categories= await Category.find();
 
         let totalProducts;
-
+        //mongosearch option mongo pagination(skip and limit)
         const sort=req.query.sort;
-        console.log(sort,"from controller")
+        // console.log(sort,"from controller")
         let sortOption={};
         if(sort==='asc'){
-            console.log("if is   working")
+            // console.log("if is   working")
             sortOption={price:1}
         }else if(sort==='desc'){
-            console.log("else if  working2")
+            // console.log("else if  working2")
             sortOption={price:-1}
         }else{
             sortOption={};
@@ -44,7 +44,7 @@ const loadAllCategory= async(req,res)=>{
             sort:sortOption,
             query:findQuery
         };
-        console.log(options, "from all category controller")
+        // console.log(options, "from all category controller")
 
         const paginatedProducts= await Product.paginate(findQuery,options)
 
@@ -64,26 +64,6 @@ const loadAllCategory= async(req,res)=>{
         console.log(error);
     }
 }
-
-const filterProducts = async (req, res) => {
-    try {
-      const { minPrice, maxPrice } = req.body;
-  
-      if (!minPrice || !maxPrice) {
-        return res.status(400).json({ error: 'Minimum and maximum prices are required' });
-      }
-  
-      const products = await Product.find({
-        price: { $gte: parseFloat(minPrice), $lte: parseFloat(maxPrice) },
-        is_listed: true, // Assuming you only want to filter listed products
-      });
-  
-      res.render('user/shop', { products, userData, categories });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
 
 
 const loadMensCategory= async(req,res)=>{
@@ -113,7 +93,6 @@ const loadkidsCategory= async(req,res)=>{
 
 module.exports={
     loadAllCategory,
-    filterProducts,
     loadMensCategory,
     loadWomensCategory,
     loadkidsCategory

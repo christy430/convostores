@@ -25,7 +25,9 @@ const loadorders= async(req,res)=>{
         .populate({
           path: "items.product",
           model: "product",
-        }).skip((page - 1) * limit)
+        })
+        .sort({ orderDate: -1 }) 
+        .skip((page - 1) * limit)
         .limit(limit)
 
         res.render('./admin/order',{order:orders,totalPages,currentPage:page});

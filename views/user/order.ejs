@@ -41,7 +41,7 @@
                             <h5 class="mb-0">
                               <div class="d-flex justify-content-between">
                                 <div>
-                                  <span><%= order_data._id %></span>
+                                  <span></span>
                                 </div>
                                 <div>
                                   <span>
@@ -51,11 +51,12 @@
                               </div>
                             </h5>
                           </div>
+                        
                           <% order_data.items.forEach((item_value) => { %>
                           <div class="card-body row">
                             <div class="col-5">
                               <div class="d-flex align-items-center">
-                                <img src='/assets/imgs/productIMG/<%=item_value.product.image[0]%>' alt="<%= item_value.image%>" style="width: 65px; height: 65px" class="rounded-circle" />
+                                <img src='/assets/imgs/productIMG/<%=item_value.product?.image[0]%>' alt="" style="width: 65px; height: 65px" class="rounded-circle" />
                                 <div class="ms-3">
                                   <p class="fw-bold mb-1"><%= item_value.product.name %></p>
                                 </div>

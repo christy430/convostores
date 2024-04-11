@@ -76,12 +76,12 @@
                                                         </td>
                                                         <td class="text-center" data-title="Stock">
                                                             <div class="cart-product-quantity">
-                                                                
+                                                                <% const maxQuantity= Math.min(cartData.product.stock,10);%>
                                                                 <input type="number" class="form-control" name="qty" value="<%= cartData.quantity %>" min="1" max="10" step="1" data-decimals="0" required onchange="updateCart('<%= cartData.product._id %>', this.value,'<%=cartData.size%>')">
                                                             </div>
                                                         </td>
                                                         <td class="price" data-title="Size"><span><%= cartData.size %></span></td>
-                                                        <td class="text-right" data-title="Cart"><span><%= productTotal[index] %></span></td>
+                                                        <td class="text-right" data-title="Cart"><p id="subTot<%= cartData.product._id %>"><%= productTotal[index] %></p></td>
                                                         <td>
                                                             <button type="button" onclick="confirmRemoveCartItem('<%= cartData.product._id %>');">
                                                                 <i class="fi-rs-trash"></i>
@@ -116,7 +116,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td class="cart_total_label">Cart Subtotal</td>
-                                                                <td class="cart_total_amount"><span class="font-lg fw-900 text-brand"><%= subtotalwithshipping %></span></td>
+                                                                <td class="cart_total_amount"><span class="font-lg fw-900 text-brand checkout-Total" id="checkoutTot"><%= subtotalwithshipping %></span></td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="cart_total_label">Shipping</td>
@@ -124,7 +124,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td class="cart_total_label">Total</td>
-                                                                <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand"><%= subtotalwithshipping %></span></strong></td>
+                                                                <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand checkout-Total" id="newTot"><%= subtotalwithshipping %></span></strong></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -214,6 +214,13 @@ $(document).on('change', 'input[name="qty"]', function() {
 //         newSize
 //     };
 
+//     const maxQuantity = parseInt(this.getAttribute('max'));
+
+//     if (newQuantity > maxQuantity) {
+//         alert('Exceeds available Stock!');
+//         this.value = maxQuantity;
+//     }
+
 //     $.ajax({
 //         url: `/updatecart?productId=${productId}`,
 //         type: 'PUT',
@@ -241,9 +248,6 @@ $(document).on('change', 'input[name="qty"]', function() {
 //         }
 //     });
 // }
-
-
-
 function updateCart(productId, newQuantity, newSize) {
     const requestData = {
         newQuantity,
@@ -261,21 +265,26 @@ function updateCart(productId, newQuantity, newSize) {
     .then(data => {
         if (data.success) {
             console.log(data, "from update cart");
+            const total = document.querySelector('#checkoutTot')
+            const newTotal =document.querySelector('#newTot')
+            const subtotal = document.getElementById(`subTot${productId}`);
+            subtotal.innerHTML = data.subtotal;
+                newTotal.innerHTML =data.total
+                total.innerText = data.total
+             
 
-            // Update UI elements without reloading the page
-            const productTotalElement = document.querySelector(`tr[data-product-id="${productId}"] .text-right span`);
-            const quantityInputElement = document.querySelector(`tr[data-product-id="${productId}"] input[name="qty"]`);
-            // const cartSubtotalElement = document.querySelector('.cart_total_amount span'); // Assuming you have a single subtotal element
-            // const cartTotalElement = document.querySelector('.cart_total_amount strong span'); // Assuming you have a single total element
+                // const productTotalElement = document.querySelector(`tr[data-product-id="${productId}"] .text-right span`);
+                // console.log(productTotalElement, "productTotalElement from update cart")
+                const quantityInputElement = document.querySelector(`tr[data-product-id="${productId}"] input[name="qty"]`);
+                // console.log(quantityInputElement, "quantityInputElement from update cart")
+                // location.reload();
             
-            if (productTotalElement && quantityInputElement && cartSubtotalElement && cartTotalElement) {
-                productTotalElement.textContent = data.subtotal; // Update product total
-                quantityInputElement.value = data.newQuantity; // Update quantity input value
-                // cartSubtotalElement.textContent = data.subtotal; // Update cart subtotal
-                // cartTotalElement.textContent = data.total; // Update cart total
-            } else {
-                console.error('One or more elements not found');
-            }
+            if (productTotalElement && quantityInputElement) {
+                    // productTotalElement.textContent = data.subtotal; // Update product total
+                    quantityInputElement.value = data.newQuantity; // Update quantity input value
+                } else {
+                    console.error('One or more elements not found');
+                }
         } else {
             // Handle error cases
             const errorMessage = data.error || 'Unknown error occurred';
@@ -291,7 +300,10 @@ function updateCart(productId, newQuantity, newSize) {
         console.error('Error updating cart:', error);
     });
 }
-
+    
 </script>
+
+
+
 
 

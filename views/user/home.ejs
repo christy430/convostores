@@ -13,7 +13,7 @@
                                             <h3 class="animated fw-900">Supper Value Deals</h3>
                                             <h2 class="animated fw-900 text-brand">On All Products</h2>
                                             <p class="animated">Save more with coupons & up to 70% off</p>
-                                            <a class="animated btn btn-brush btn-brush-3" href="shop-product-right.html" tabindex="0"> Shop Now </a>
+                                            <a class="animated btn btn-brush btn-brush-3" href="/allcategory" tabindex="0"> Shop Now </a>
                                         </div>
                                     </div>
                                     <div class="col-lg-7 col-md-6">
@@ -33,7 +33,7 @@
                                             <h3 class="animated fw-900">Fashion Trending</h3>
                                             <h2 class="animated fw-900 text-brand">Great Collection</h2>
                                             <p class="animated">Save more with coupons & up to 20% off</p>
-                                            <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html" tabindex="0"> Get It Now </a>
+                                            <a class="animated btn btn-brush btn-brush-1" href="/allcategory" tabindex="0"> Get It Now </a>
                                         </div>
                                     </div>
                                     <div class="col-lg-7 col-md-6">
@@ -51,129 +51,120 @@
         </section>
 
 
-        <section class="product-tabs section-padding position-relative wow fadeIn animated">
-            <!-- div class="bg-square<"></div> -->
+
+        <section class="product-carousel section-padding position-relative wow fadeIn animated">
             <div class="container">
-                <div class="tab-header">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
-                        </li>
-                        <!-- <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                        </li> -->
-                        <!-- <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
-                        </li> -->
-                    </ul>
-                </div>
-                <!--End nav-tabs-->
-                <div class="tab-content wow fadeIn animated" id="myTabContent">
-                    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
-                        <div class="row product-grid-4" id="productGrid">
-                            <% for (let product of products) { 
-                                const categoryId = product.category; 
-                                categories.forEach(category => { 
-                                    if (categoryId.toString() === category._id.toString()) { 
-                                        if (category.is_listed) { %>
-        
-                                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                                <div class="product-cart-wrap mb-30">
-                                                    <div class="product-img-action-wrap">
-                                                        <div class="product-img product-img-zoom">
-                                                            <a href="/singleProduct/<%= product._id%>">
-                                                                <img class="default-img" src="/assets/imgs/productIMG/<%= product.image[0]%>" alt="" />
-                                                                <img class="hover-img" src="/assets/imgs/productIMG/<%= product.image[1]%>" alt="" />
-                                                            </a>
+                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <% let counter = 0;
+                        let itemsPerSlide = 4; // Adjusted to display 4 products per slide
+                        for (let i = 0; i < Math.ceil(products.length / itemsPerSlide); i++) { %>
+                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                <div class="row">
+                                    <% for (let j = 0; j < itemsPerSlide; j++) {
+                                        const index = i * itemsPerSlide + j;
+                                        if (index < products.length) {
+                                            const product = products[index];
+                                            const categoryId = product.category; 
+                                            categories.forEach(category => { 
+                                                if (categoryId.toString() === category._id.toString()) { 
+                                                    if (category.is_listed) { %>
+                                                        <div class="col-lg-3">
+                                                            <div class="card">
+                                                                <a href="/singleProduct/<%= product._id%>">
+                                                                    <img class="card-img-top" src="/assets/imgs/productIMG/<%= product.image[0]%>" alt="<%= product.name %>">
+                                                                </a>
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title"><%= product.name %></h5>
+                                                                    <p class="card-text">Price: <%= product.price %></p>
+                                                                    <!-- Add any additional information you want to display -->
+                                                                </div>
+                                                            </div>
                                                         </div>
-        
-                                                        <div class="product-badges product-badges-position product-badges-mrg">
-        
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-content-wrap">
-                                                        <div class="product-category">
-                                                            <a href="shop-grid-right.html">Music</a>
-                                                        </div>
-                                                        <h2><a href="/singleProduct/<%= product._id%>"><%= product.name %></a></h2>
-                                                        <div class="rating-result" title="90%">
-                                                            <span>
-                                                                <span>
-                                                                    <% if(product.discountStatus==true && new Date() <= new Date(product.discountEnd) ){ %>
-                                                                        <% const percentageOff = ((product.price - product.discountPrice) / product.price) * 100; %>
-                                                                        <span style="font-size: 16px; background-color: rgb(255, 255, 255); border-radius: 2px; padding: 5px 10px 5px 10px;" class="old-price ml-3 text-success">- <%= percentageOff.toFixed(2) %>% OFF</span>
-                                                                    <% } %>
-                                                                </span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <% if (product.discountStatus && new Date() <= new Date(product.discountEnd) ) { %>
-                                                                <span>₹<%= product.discountPrice %> </span>
-                                                                <span class="old-price">- ₹<s><%= product.price %></s></span>
-                                                            <% } else { %>
-                                                                <span> ₹<%= product.price %></span>
-                                                            <% } %>
-                                                        </div>
-                                                        <div class="product-action-1 show">
-        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-        
-                                        <% } 
-                                    } 
-                                }); 
-                            } %>
-                        </div>
-                        <!--End product-grid-4-->
+                                                    <% } 
+                                                } 
+                                            }); 
+                                        } else { %>
+                                            <div class="col-lg-3"></div>
+                                    <% } %>
+                                    <% counter++;
+                                    } %>
+                                </div>
+                            </div>
+                        <% } %>
                     </div>
-                    <!--En tab two (Popular)-->
-                    <div class="tab-pane fade" id="tab-three" role="tabpanel" aria-labelledby="tab-three">
-                        <div class="row product-grid-4">
-                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                <div class="product-cart-wrap mb-30">
-                                    <div class="product-img-action-wrap">
-                                        <div class="product-img product-img-zoom">
-                                            <a href="shop-product-right.html">
-                                                <img class="default-img" src="/userassets/imgs/shop/product-2-1.jpg" alt="">
-                                                <img class="hover-img" src="/userassets/imgs/shop/product-2-2.jpg" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="product-action-1">
-                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                    <!-- Carousel controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-slider position-relative mb-30">
+            <div class="container">
+                <div class="home-slide-cover bg-grey-10 mt-30">
+                    <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
+                        <div class="single-hero-slider single-animation-wrap">
+                            <div class="container">
+                                <div class="row align-items-center slider-animated-1">
+                                    <div class="col-lg-5 col-md-6">
+                                        <div class="hero-slider-content-2">
+                                            <h4 class="animated">Trade-In Offer</h4>
+                                            <h3 class="animated fw-900">Supper Value Deals</h3>
+                                            <h2 class="animated fw-900 text-brand">On All Products</h2>
+                                            <p class="animated">Save more with coupons & up to 70% off</p>
+                                            <a class="animated btn btn-brush btn-brush-3" href="/allcategory" tabindex="0"> Shop Now </a>
                                         </div>
                                     </div>
-                                    <div class="product-content-wrap">
-                                        <div class="product-category">
-                                            <a href="shop-grid-right.html">Music</a>
-                                        </div>
-                                        <h2><a href="shop-product-right.html">Donec ut nisl rutrum</a></h2>
-                                        <div class="rating-result" title="90%">
-                                            <span>
-                                                <span>90%</span>
-                                            </span>
-                                        </div>
-                                        <div class="product-price">
-                                            <span>$238.85 </span>
-                                            <span class="old-price">$245.8</span>
-                                        </div>
-                                        <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                                    <div class="col-lg-7 col-md-6">
+                                        <div class="single-slider-img single-slider-img-1">
+                                            <img class="animated" src="assets/imgs/slider/slider-5.png" alt="">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--End product-grid-4-->
+                        <div class="single-hero-slider single-animation-wrap">
+                            <div class="container">
+                                <div class="row align-items-center slider-animated-1">
+                                    <div class="col-lg-5 col-md-6">
+                                        <div class="hero-slider-content-2">
+                                            <h4 class="animated">Hot promotions</h4>
+                                            <h3 class="animated fw-900">Fashion Trending</h3>
+                                            <h2 class="animated fw-900 text-brand">Great Collection</h2>
+                                            <p class="animated">Save more with coupons & up to 20% off</p>
+                                            <a class="animated btn btn-brush btn-brush-1" href="/allcategory" tabindex="0"> Get It Now </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-6">
+                                        <div class="single-slider-img single-slider-img-1">
+                                            <img class="animated" src="assets/imgs/slider/slider-4.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!--En tab three (New added)-->
+                    <div class="slider-arrow hero-slider-1-arrow"></div>
                 </div>
-                <!--End tab-content-->
             </div>
         </section>
+        
+        
+        
+        
+
+        
+
+
+
+        
                
     </main>
     <%-include('../layout/userfooter') %>

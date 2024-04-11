@@ -124,30 +124,52 @@ const updatecart= async(req,res)=>{
         let newsizeData=parseInt(newSize,10)
 
         const existingcart= await cart.findOne({user:userid}).populate("items.product");
+        console.log({existingcart})
         const productToupdate= await product.findById(productid);
         const selectedsize= productToupdate.sizes.find((s)=>s.size === newSize);
+        console.log(productToupdate,"productToupdate")
 
         if(selectedsize && selectedsize.stock>=parseInt(newQuantity)){
             console.log("in if loop in cartcontroller");
             const existingcartitem= existingcart.items.find((item)=>item.product._id.toString()=== productid);
-            
+            console.log(existingcartitem,"item.product._id from cart")
+            let p_price=0
             if(existingcart && existingcartitem.size===newsizeData){
 
                 existingcartitem.quantity=parseInt(newQuantity);
-                const subtotal = existingcart.items.reduce((total, item) => total + (item.quantity * item.product.price), 0);
-
-                existingcart.total=existingcart.items.reduce((total,item)=>total+(item.quantity || 0),0);
+                //  const subtotal = existingcart.items.reduce((total, item) => total + (item.quantity * item.product.price), 0);
+                // const subtotal = existingcart.items.map(item=>item.product.price*item.quantity)
+                // console.log("////////////////////////////////subtotal")
+                //  console.log(subtotal)
+                // p_price = subtotal
+                existingcart.total=existingcart.items.reduce((total,item)=>total+(item.quantity*item.product.price|| 0),0);
             }
-            console.log(existingcart,"existingcart");
+            // Find the cart item with the given product ID
+            const cartItem = existingcart.items.find(item => item.product.equals(productid));
+            if (cartItem) {
+              // Calculate subtotal for the product
+              const subtotal = cartItem.quantity * cartItem.product.price;
+               p_price = subtotal
+              console.log("Subtotal for product:", subtotal);
+          } else {
+              console.log("Product not found in the cart");
+          }
+
+          
+            // console.log(existingcart,"existingcart");
             await existingcart.save();
+            console.log(existingcart,"after save existingcart")
             return res.status(200).json({
               success: true,
               message: 'Cart updates successfully',
-              subtotal: existingcart.subtotal, // Assuming you have the subtotal value in your cart object
+              subtotal:p_price, // Assuming you have the subtotal value in your cart object
               total: existingcart.total // Assuming you have the total value in your cart object
-          });        }else{
+          });  
+            }else{
+              console.log("in else part code not working")
             return res.status(400).json({success:false,error:'out of stock or invalid quantity'});
         }
+        
     }catch(error){
         console.log(error,"error updating cart");
         res.json({success:false,error:"internal server error"})

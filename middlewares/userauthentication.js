@@ -6,13 +6,13 @@ const isLogin = async(req,res,next)=>{
     try{
         const userData = await User.findOne({ _id:req.session.user_id });
     if(!userData){
-        console.log("in if condition middleware")
+        // console.log("in if condition middleware")
         
     }
     
 
         if(req.session.user_id &&  userData.is_admin==0 && userData.is_blocked==0){
-            console.log(req.session.user_id,"middleware");
+            // console.log(req.session.user_id,"middleware");
             next();
         }else{
             if(userData.is_blocked==1){

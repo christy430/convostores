@@ -251,6 +251,17 @@ const laoadOrderdetails= async(req,res)=>{
         }).sort({orderDate:-1}).skip((page-1)*limit)
         .limit(limit);
         let orderData= order
+        orderData.forEach(order => {
+            console.log(`Order ID: ${order._id}`);
+            order.items.forEach(item => {
+                if (item.product && item.product.name) {
+                    console.log(`Product Name: ${item.product.name}`);
+                } else {
+                    console.log("Product information not available");
+                }
+            });
+            console.log("-------------------------------------------");
+        });  
         if(userData){
             res.render('user/order',{user:userData,order:orderData,totalPages,currentPage:page});
         }else{
@@ -584,30 +595,31 @@ const razorPayOrder= async(req,res)=>{
           console.log(options,"from razorpay,options")
           instance.orders.create(options, async (err, razorpayOrder) => {
             if (err) {
-            //   console.error("Error creating Razorpay order:", err);
-            //   return res
-            //     .status(400)
-            //     .json({ success: false, error: "Payment Failed", user });
-            const order = new Order({
-                user: userId,
-                items: cartItems.map(item => ({
-                  product: item.product._id,
-                  quantity: item.quantity
-                })),
-                totalAmount: totalAmount,
-                status: "payment pending"
-              });
-              await order.save();
-              console.log("in error part")
-              return res.status(400).json({ success: false, error: "Payment Failed", user });
+                console.error("Error creating Razorpay order:", err);
+                // Log the error for debugging
+                const order = new Order({
+                    user: userId,
+                    items: cartItems.map(item => ({
+                        product: item.product._id,
+                        quantity: item.quantity
+                    })),
+                    totalAmount: totalAmount,
+                    status: "payment pending"
+                });
+                console.log()
+                await order.save();
+                // Return an error response
+                return res.status(400).json({ success: false, error: "Payment Failed", user });
             } else {
-              res.status(201).json({
-                success: true,
-                message: "Order placed successfully.",
-                order: razorpayOrder,
-              });
+                // Return success response
+                return res.status(201).json({
+                    success: true,
+                    message: "Order placed successfully.",
+                    order: razorpayOrder,
+                });
             }
-          });
+        });
+        
         } catch (error) {
           return res.status(400).json({ success: false, error: "Payment Failed" });
         }

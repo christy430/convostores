@@ -265,35 +265,35 @@ const postsignup=async(req,res)=>{
         }
 }; 
 
-// // Google Sign-In route
-// const googleSignIn = async (req, res) => {
-//   try {
-//     const { token } = req.body;
+// Google Sign-In route
+const googleSignIn = async (req, res) => {
+  try {
+    const { token } = req.body;
 
-//     const ticket = await client.verifyIdToken({
-//       idToken: token,
-//       audience: 'YOUR_GOOGLE_CLIENT_ID',
-//     });
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: 'YOUR_GOOGLE_CLIENT_ID',
+    });
 
-//     const payload = ticket.getPayload();
-//     const googleEmail = payload.email;
+    const payload = ticket.getPayload();
+    const googleEmail = payload.email;
 
-//     // Check if the Google email exists in your database
-//     const existingUser = await User.findOne({ email: googleEmail });
+    // Check if the Google email exists in your database
+    const existingUser = await User.findOne({ email: googleEmail });
 
-//     if (existingUser) {
-//       // Log in the existing user
-//       req.session.user_id = existingUser._id;
-//       return res.status(303).redirect('/');
-//     } else {
-//       // Redirect to a registration page or handle as needed
-//       return res.status(303).redirect('/signup-google');
-//     }
-//   } catch (error) {
-//     console.error('Google Sign-In Error:', error);
-//     return res.status(500).send('Internal Server Error');
-//   }
-// };
+    if (existingUser) {
+      // Log in the existing user
+      req.session.user_id = existingUser._id;
+      return res.status(303).redirect('/');
+    } else {
+      // Redirect to a registration page or handle as needed
+      return res.status(303).redirect('/signup-google');
+    }
+  } catch (error) {
+    console.error('Google Sign-In Error:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+};
 
 const accounthome= async(req,res)=>{
   try{
@@ -500,6 +500,7 @@ module.exports={
   forgotpassword,
   loadresetpassword,
   resetPassword,
-  loadWallets
+  loadWallets,
+  googleSignIn
   
 };

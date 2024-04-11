@@ -44,7 +44,7 @@ router.post('/updateprofilepic',multer.uploadUser.single('croppedImage'),userCon
 
 
 //google sign-up
-// router.post('/signup/google',userController.googleSignIn);
+router.post('/signup/google',userController.googleSignIn);
 
 
 //user
@@ -90,7 +90,7 @@ router.delete('/removefromcart',authentication.isLogin,cartcontroller.removefrom
 router.get('/allcategory',categoryController.loadAllCategory);
 
 router.get('/shopCategoryFilter/:id?',categoryController.loadAllCategory);
-router.get('/filterProducts',categoryController.filterProducts);
+
 router.get('/sorting/:id?',categoryController.loadAllCategory);
 
 router.get('/menscategory',categoryController.loadMensCategory);

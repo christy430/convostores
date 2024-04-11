@@ -47,7 +47,8 @@
                           <i class="fa-solid fa-wallet" style="font-size: 50px;"></i>
                           <h3>Wallet Balance</h3>
                           <% if (wallet) { %>
-                            <p style="font-size: 30px;">₹&nbsp;<%= wallet.walletBalance %></p>
+                            <p style="font-size: 30px;">₹&nbsp;<%= Math.round(wallet.walletBalance) %>
+                            </p>
                           <% } else { %>
                             <p style="font-size: 30px;">₹&nbsp; 0</p>
                           <% } %>
