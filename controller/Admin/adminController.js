@@ -34,7 +34,7 @@ const adminhome=async(req,res)=>{
             },
             { $group: { _id: null, monthlyAmount: { $sum: "$totalAmount" } } },
           ]);
-
+//hiii shinto dude
           //top 10 selling products
           const topSellingProducts = await Order.aggregate([
             { $unwind: "$items" }, // Unwind the items array
