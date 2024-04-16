@@ -1,5 +1,7 @@
 const mongoose=require('mongoose');
-const dotenv=require('dotenv')
+require('dotenv').config(); // Load environment variables from .env file
+
+console.log("from mongodb connection",process.env.mongoDb_atlas_key)
 
 function connectDb(){
     const connect=mongoose.connect(process.env.mongoDb_atlas_key);
@@ -7,8 +9,8 @@ function connectDb(){
     .then(()=>{
       console.log("Mongodb server is connected");
     })
-    .catch(()=>{
-      console.log("Mongodb is not connected");
+    .catch((error)=>{
+      console.log("Mongodb is not connected",error);
     })
   }
 
