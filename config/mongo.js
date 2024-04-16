@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 const dotenv=require('dotenv')
 
 function connectDb(){
-    const connect=mongoose.connect(process.env.mongo_key);
+    const connect=mongoose.connect(process.env.mongoDb_atlas_key);
     connect 
     .then(()=>{
       console.log("Mongodb server is connected");
