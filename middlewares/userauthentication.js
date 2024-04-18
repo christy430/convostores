@@ -1,18 +1,18 @@
 const User = require("../model/usermodel");
 
 const isLogin = async(req,res,next)=>{
-    // console.log(req.url);
     
     try{
         const userData = await User.findOne({ _id:req.session.user_id });
+       
     if(!userData){
-        // console.log("in if condition middleware")
+        res.render("./user/login", { alert: "please login to Continue" });
+        
         
     }
     
 
         if(req.session.user_id &&  userData.is_admin==0 && userData.is_blocked==0){
-            // console.log(req.session.user_id,"middleware");
             next();
         }else{
             if(userData.is_blocked==1){
@@ -24,8 +24,8 @@ const isLogin = async(req,res,next)=>{
             }
         } 
     }catch(error){
-        res.render("./user/login", { alert: "You are blocked from this site!" });
-        console.log(error.message,"from middleware");
+        res.render("./user/login", { alert: "Please Login to Continue" });
+        console.log(error);
         
     }
 }
@@ -35,7 +35,6 @@ const isLogout = async(req,res,next)=>{
     try{
 
         if(req.session.user_id && userData.is_admin==0 ){
-            console.log('user',req.session.user_id)
             res.redirect('/home');
         }
         else{
@@ -43,7 +42,7 @@ const isLogout = async(req,res,next)=>{
         }
 
     }catch(error){
-        console.log(error.message);
+        console.log(error);
     }
 
 }

@@ -38,7 +38,7 @@ router.post('/signup',userController.postsignup);
 
 
 //account
-router.get('/account',userController.accounthome);
+router.get('/account',authentication.isLogin,userController.accounthome);
 router.post('/account',multer.uploadUser.single('image'),userController.useredit);
 router.post('/updateprofilepic',multer.uploadUser.single('croppedImage'),userController.updateprofilepicture);
 

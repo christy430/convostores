@@ -1,6 +1,6 @@
 
 const express = require('express');
-const dotenv=require('dotenv')
+require('dotenv').config()
 const createError = require('http-errors');
 const session=require('express-session');
 const path = require('path');
@@ -23,8 +23,6 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 const port = 3000
-
-dotenv.config()
 
 
 mongodb.connectDb();

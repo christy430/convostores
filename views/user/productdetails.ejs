@@ -254,6 +254,8 @@ function addToWishlist() {
         })
             .then(response => response.json())
             .then(data => {
+  
+                if(data?.status === 403)window.location.href = '/login'
                 if (data.success) {
                     // Show success SweetAlert
                     Swal.fire({
@@ -272,6 +274,7 @@ function addToWishlist() {
                 }
             })
             .catch(error => {
+                window.location.href = '/login'
                 console.error('Error adding to wishlist:', error);
             });
     }
@@ -280,6 +283,15 @@ function addToWishlist() {
 function addToCart() {
   const qtyData = document.getElementById('qty').value;
   const productDataId = document.getElementById('productData_id').value;
+
+  if(!sizeData){
+    Swal.fire({
+            title: 'Cannot add',
+            text: 'Please select size',
+            icon: 'error',
+          });
+          return;
+  }
 
   if (qtyData && productDataId) {
     const requestData = {
@@ -297,6 +309,7 @@ function addToCart() {
     })
       .then(response => response.json())
       .then(data => {
+        if(data?.status === 403)window.location.href = '/login'
         if (data.success) {
           Swal.fire({
             title: 'Success!',
@@ -312,12 +325,10 @@ function addToCart() {
         }
       })
       .catch(error => {
+        window.location.href = '/login'
         console.error('Error:', error);
-        Swal.fire({
-          title: 'Error!',
-          text: 'Error occurred while placing order',
-          icon: 'error',
-        });
+        console.log(error, "ippo cheytha sdlkfmkosdng")
+       
       });
   }
 }

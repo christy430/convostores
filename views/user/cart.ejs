@@ -263,6 +263,7 @@ function updateCart(productId, newQuantity, newSize) {
     })
     .then(response => response.json())
     .then(data => {
+        
         if (data.success) {
             console.log(data, "from update cart");
             const total = document.querySelector('#checkoutTot')
