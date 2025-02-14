@@ -157,11 +157,15 @@ const verifylogin=async(req,res)=>{
         console.log('in');
         const email=req.body.email;
         const password=req.body.password;
+        console.log(email,"email",password,"password");
 
         const userData=await user.findOne({email:email});
+        console.log(userData,"useradmin")
         if(!email||!password){
+            console.log("in if ")
             res.render('./admin/adminlogin',{alert:"please enter both email ans password"})
         }else if(userData){
+            console.log("else if ")
             const macthpassword= await bcrypt.compare(password,userData.password);
             if(macthpassword && userData.is_admin==1){
                 console.log('admin');
